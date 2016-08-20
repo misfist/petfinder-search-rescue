@@ -1,0 +1,935 @@
+/*=============================================*\
+ PET FILTER FUNCTIONALITY STYLES
+\*=============================================*/
+html{
+overflow:scroll!important;
+}
+#petfinder_search_rescue_container input:focus,
+#petfinder_search_rescue_container select:focus,
+#petfinder_search_rescue_container textarea:focus,
+#petfinder_search_rescue_container button:focus {
+    outline: none;
+}
+
+#petfinder_search_rescue_container{clear:both;position:relative;}
+
+/*header(top bar)*/
+#petfinder_search_rescue_container .psr__header{
+display: inline-block;
+position:relative;
+vertical-align: top;
+width: 100%;
+margin: 0 auto;
+top: 0;
+color: #ccc;
+padding:0;
+height:50px;
+border-bottom:1px solid #fff;
+background: #F67D42;/*peach*/
+/*top radius only*/
+-webkit-border-top-right-radius: 8px;
+-webkit-border-top-left-radius: 8px;
+-moz-border-radius-topright: 8px;
+-moz-border-radius-topleft: 8px;
+border-top-right-radius: 8px;
+border-top-left-radius: 8px;
+}
+
+#petfinder_search_rescue_container .psr_container-pets{
+background:#fff;
+position:relative;
+vertical-align: top;
+width:100%;
+display:inline-block;
+overflow:hidden;
+}
+
+#petfinder_search_rescue_container #petOptions-headline{
+font-size: 21px;
+color: #fff;
+padding: 5px 30px;
+}
+#petfinder_search_rescue_container #toggle-petOptions-holder{
+	position:relative;
+	height:50px;
+	font-size:16px;
+	cursor:pointer;
+}
+
+#petfinder_search_rescue_container #toggle-petOptions{
+position: absolute;
+bottom: -1px;
+padding: 5px;
+color: #F67D42;
+background: #fff;
+border-left:1px solid #ccc;
+-webkit-border-top-right-radius: 6px;
+-moz-border-radius-topright: 6px;
+border-top-right-radius: 6px;
+	}
+
+#toggle-petOptions span{float:left;padding:0 5px;}
+#toggle-petOptions span.ico-psr_hide, #toggle-petOptions span.ico-psr_show{padding:7px;font-size:14px;}
+
+/*up arrow*/
+.p_sr-pagetop-arrow{
+  display:none;
+  z-index:120;
+position: fixed;
+text-align:center;
+bottom: 70px;
+right: 30px;
+cursor: pointer;
+color: #fff;
+background: #999999;
+width: 32px;
+height: 32px;
+-webkit-border-radius: 100px;
+-moz-border-radius: 100px;
+border-radius: 100px;
+}
+.p_sr-pagetop-arrow span{
+	font-size: 21px;
+line-height: 32px;
+}
+
+.psr__header .psr__header-icon{
+color: white;
+float: right;
+font-size: 30px;
+height: 100%
+	}
+#petfinder_search_rescue_container .psr__header .psr__header-icon a{text-decoration:none;color:white;}
+#psr__adoptform-btn .ico-psr_application, #psr__adoptinfo-btn .ico-psr_info{float: left;padding: 6px;}
+.psr__header-title{
+font-size: 15px;
+padding: 12px 0px;
+float:left;
+}
+
+.psr__header p{color:#ccc;}
+
+
+#petfinder_search_rescue_container p.filter__label {
+margin: 4px 10px;
+color: #555;
+font-weight: bold;
+font-size: 14px;
+}
+
+#petfinder_search_rescue_container input.filter__search {
+  padding-right:30px;
+    -webkit-appearance: textfield;
+  font-size:21px;
+  background: #f8f8f8;
+color: #555;
+width:100%;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+height:40px;
+padding:3px;
+border: 0!important;
+}
+
+#petfinder_search_rescue_container input[type=text]::-ms-clear{/**hide inherit x in search input for ie10**/
+	display:none;width : 0;
+  height: 0;}
+
+
+#petfinder_search_rescue_container #search-icon{
+position: absolute;
+right: 0px;
+padding: 6px 6px 0 6px;
+color:#ddd;
+font-size:18px;
+background-color: #f8f8f8;
+-webkit-border-top-right-radius: 3px;
+-webkit-border-bottom-right-radius: 3px;
+-moz-border-radius-topright: 3px;
+-moz-border-radius-bottomright: 3px;
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#petfinder_search_rescue_container #search-icon .ico-psr_close{cursor:pointer;color:#999;}
+
+#petfinder_search_rescue_container #search-icon-container{
+	padding:5px 0 0 0;
+	text-align: center;
+	margin:0;
+	position:relative;
+	}
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ */
+
+#petfinder_search_rescue_container #psr__grid.psr__row-fluid{
+	margin-right: -10%;
+	margin-left: 10%;
+	margin:0\9;/*for ie7 & ie8*/
+
+	}
+
+
+/*all icon categories*/
+#petfinder_search_rescue_container #all-pet-options{
+width:100%;
+margin-bottom: 50px;
+color: #888;
+margin-bottom: 25px;
+border:1px solid #ccc;
+border-top:none;
+font-weight: bold;
+padding: 5px 15px;
+background: #fff;
+position: relative;
+/*bottom radius only*/
+-webkit-border-bottom-right-radius: 8px;
+-webkit-border-bottom-left-radius: 8px;
+-moz-border-radius-bottomright: 8px;
+-moz-border-radius-bottomleft: 8px;
+border-bottom-right-radius: 8px;
+border-bottom-left-radius: 8px;
+
+}
+
+#petfinder_search_rescue_container .petOption-section{
+padding:10px;
+border:1px solid #ccc;
+margin:5px 0;
+-webkit-border-radius: 12px;
+-moz-border-radius: 12px;
+border-radius: 12px;
+height:115px;
+background:#fff;
+}
+
+#petfinder_search_rescue_container .psr__span3.petOption-section{*width:21%!important;}/*ie7 only*/
+
+#petfinder_search_rescue_container .petOption-section ul{
+height: 60px;
+overflow-y: auto;
+overflow-x:hidden;
+padding:0;
+margin:0;
+}
+
+#petfinder_search_rescue_container .breedOption-section{
+border: 1px solid #ccc;
+padding: 5px 10px;
+margin-top: 5px;
+}
+
+#petfinder_search_rescue_container .breedOption-section ul{
+	overflow-y:scroll;
+	height:60px;
+}
+
+/**for styling icons on page (before clicked on)*/
+#petfinder_search_rescue_container .picture-item__glyph{
+height:150px;
+width:100%;
+overflow:hidden;
+  }
+
+
+#petfinder_search_rescue_container .picture-item__title{
+	  line-height:1;
+  font-size: 24px;
+color: #F67D42;/*peach*/
+  }
+
+#petfinder_search_rescue_container .popup-bg{
+  display:none;
+  position: fixed;
+background: #444;
+height: 100%;
+width: 100%;
+z-index: 80;
+-moz-opacity: 0.80;
+opacity:.80;
+filter: alpha(opacity=80);
+top:0;
+bottom:0;
+left:0;
+right:0;
+}
+
+#petfinder_search_rescue_container .window-popup{
+display:none;
+ padding:15px;
+background:#fff;
+position:fixed;
+    left:0;
+    right:0;
+    top:75px;
+    margin-left:auto;
+    margin-right:auto;
+    z-index:90;
+	color:#666;
+    word-wrap: break-word;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+    -moz-box-shadow: 0px 0px 20px #222;
+-webkit-box-shadow: 0px 0px 20px #222;
+box-shadow: 0px 0px 20px #222;
+}
+
+#petfinder_search_rescue_container #indiepet-popup.window-popup{
+width:80%;
+height:575px;
+}
+
+#petfinder_search_rescue_container #adoptinfo-popup.window-popup{
+width: 800px;
+height: 475px;
+}
+#petfinder_search_rescue_container pre{background:#fff!important;color:#444!important;}
+
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner{
+max-height: 400px;
+height:400px;
+overflow-y: auto;
+margin-top: 0px;
+padding: 15px;
+font-family: inherit;
+white-space: pre-wrap;
+white-space: -moz-pre-wrap;
+white-space: -pre-wrap;
+white-space: -o-pre-wrap;
+word-break: normal;
+line-height:1.6;
+font-size:14px;
+font-family:inherit;
+position:relative;
+}
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner p{margin:0;}
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner ul{line-height:.75;}
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner h1{font-size:24px;color:#333;font-family:inherit;}
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner h2{font-size:19px;color:#555;font-family:inherit;}
+#petfinder_search_rescue_container pre#adoptinfo-popup-inner h3{font-size:16px;color:#777;font-family:inherit;}
+
+
+/*for image slider*/
+#petfinder_search_rescue_container #pet-multiphotos{
+	overflow: hidden;
+	position:relative;
+	height:280px;
+	width:280px;
+	top:auto;
+	float:left;
+}
+
+#petfinder_search_rescue_container #image_slider{
+
+	position: relative;
+	height: auto;
+	list-style: none;
+	overflow: hidden;
+	float: left;
+	/*Chrom default padding for ul is 40px */
+	padding:0px;
+	margin:0px;
+}
+#petfinder_search_rescue_container #image_slider li{
+	position: relative;
+	float: left;
+	margin:0;
+	padding:0;
+}
+#petfinder_search_rescue_container #image_slider li img{
+	width:280px!important;
+	max-width:280px!important;
+	margin:0;
+	padding:0;
+}
+#petfinder_search_rescue_container .nvgt{
+	position:absolute;
+	top: 120px;
+	height: 50px;
+	width: 30px;
+	opacity: 0.6;
+	cursor:pointer;
+	color:#fff;
+	font-size:24px;
+	padding: 12px 0 12px 4px;
+}
+
+#petfinder_search_rescue_container .nvgt:hover{
+	opacity: 0.9;
+}
+#petfinder_search_rescue_container #prev{
+	background: #000;
+	left: 0px;
+}
+#petfinder_search_rescue_container #next{
+	background: #000;
+	right: 0px;
+}
+/**end for image slider*/
+#petfinder_search_rescue_container .my-petInfoAll{
+float: right;
+width: 70%;
+}
+#petfinder_search_rescue_container #pet-attributes{padding-top:10px;}
+#petfinder_search_rescue_container #pet-attributes, #pet-options, #pet-description{
+clear:both;
+background:#fff;
+color:#555;
+}
+#petfinder_search_rescue_container #pet-description pre.pf-description{
+clear: both;
+font-size:14px;
+padding: 15px;
+overflow: auto;
+max-height: 350px;
+}
+#petfinder_search_rescue_container #pet-description pre{
+	font-family:inherit;
+	 white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+word-break: normal;
+ line-height:1.6;
+	}
+
+#petfinder_search_rescue_container #pet-petfinder_url{margin-top:10px;}
+
+#petfinder_search_rescue_container #pet-attributes span, #petfinder_search_rescue_container #pet-options span{
+display: block;
+position: relative;
+float: left;
+font-size: 13px;
+margin: 0 5px 10px 0;
+padding: 3px 10px;
+color: #888;
+font-weight:bold;
+background-color: #eee;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+-webkit-transition: background-color 250ms linear;
+-moz-transition: background-color 250ms linear;
+-o-transition: background-color 250ms linear;
+-ms-transition: background-color 250ms linear;
+transition: background-color 250ms linear;
+}
+
+#petfinder_search_rescue_container #pet-adopt-btn{
+position: absolute;
+top: 40px;
+right: 10px;
+padding: 5px;
+color: #fff;
+border-radius: 6px;
+font-size: 16px;
+}
+
+#petfinder_search_rescue_container #pet-adopt-btn .psr__hoverme a.psr__adoptformlink{color:#fff;}
+
+
+#petfinder_search_rescue_container .window-popup-title{margin:0 0 10px 0;font-size:24px;font-weight:bold;color:#F67D42;line-height: 1.5em;}
+
+#petfinder_search_rescue_container .window-popup-topbtns{
+  cursor:pointer;display:block;position: absolute;top: 5px;right: 10px;font-size:18px;z-index:100;
+  /*to remove hightlighted when clicking glyph btns*/
+  -webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+#petfinder_search_rescue_container .window-popup-topbtns span{
+  margin-left:10px!important;
+  float:left;
+}
+
+#petfinder_search_rescue_container .window-popup-inner{
+max-height: 400px;
+overflow-y: auto;
+margin-top: 0px;
+padding: 0px 15px;
+}
+
+#petfinder_search_rescue_container .picture-item .glyphicon{
+font-size: 60px;
+width:100%;
+text-align: center;
+padding-top: 15px;
+height: 96px;
+color: #fff;
+}
+
+#petfinder_search_rescue_container .picture-item {
+  height: 260px;
+  margin-top: 24px;
+  cursor:pointer;
+  border:1px solid #ddd;
+  overflow: hidden;
+}
+
+#petfinder_search_rescue_container .picture-item.shuffle-item {
+  margin-left: 0;
+  /* shuffle items shouldn't have a left margin*/
+}
+
+#petfinder_search_rescue_container .picture-item.picture-item--h2 {
+  height: 464px;
+  /* 2x the height + 1 gutter */
+}
+#petfinder_search_rescue_container .picture-item.psr__span6:not(.picture-item--h2) .picture-item__details {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+#petfinder_search_rescue_container .picture-item.psr__span6:not(.picture-item--h2) .picture-item__description {
+  display: none;
+}
+#petfinder_search_rescue_container .picture-item .picture-item__inner {
+  background: #ecf0f1;
+  height: 100%;
+  overflow: hidden;
+}
+#petfinder_search_rescue_container .picture-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0px;
+  margin:0;
+}
+#petfinder_search_rescue_container .picture-item img.eimicon {padding:0;}
+
+#petfinder_search_rescue_container .picture-item .picture-item__details,
+#petfinder_search_rescue_container .picture-item .picture-item__description {
+  padding: .2em;
+}
+#petfinder_search_rescue_container .picture-item .picture-item__description {
+  margin: 0;
+  padding-top: 0;
+  padding-right: 2em;
+}
+#petfinder_search_rescue_container .picture-item .picture-item__tags {
+  margin: 0;
+padding: 0;
+  color: #333;
+font-size: 13px;
+line-height: 18px;
+display: inline-block;
+width: 100%;
+}
+#petfinder_search_rescue_container .item__breed-tag{
+	color:#777;
+}
+/*
+  Shuffle needs either relative or absolute positioning on the container
+  It will set it for you, but it'll cause another style recalculation and layout.
+  AKA worse performance - so just set it here
+ */
+#petfinder_search_rescue_container .shuffle--container {
+  position: relative;
+  overflow: hidden;
+}
+
+#petfinder_search_rescue_container .shuffle--fluid .shuffle__sizer {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Animate in styles */
+#petfinder_search_rescue_container .shuffle--animatein {
+  overflow: visible;
+}
+
+#petfinder_search_rescue_container .shuffle--animatein .picture-item__inner {
+  opacity: 0;
+  -webkit-transform: translate(0, 240px);
+  -ms-transform: translate(0, 240px);
+  transform: translate(0, 240px);
+}
+
+#petfinder_search_rescue_container .shuffle--animatein .picture-item__inner--transition {
+  -webkit-transition: all .6s ease;
+  transition: all .6s ease;
+}
+
+#petfinder_search_rescue_container .shuffle--animatein .picture-item.in .picture-item__inner {
+  opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+#petfinder_search_rescue_container #noPetsName-msg, #petfinder_search_rescue_container #noPetsCriteria-msg{
+	display:none;
+	text-align: center;
+padding: 50px;}
+
+/*******BUTTONS******/
+
+#petfinder_search_rescue_container .psr__btn-group .btn, #petfinder_search_rescue_container #pet-adopt-btn, #petfinder_search_rescue_container .psr__btn-group .onlyOption{
+  white-space:normal;
+  padding:0!important;
+  margin:0;
+display: inline-block;
+vertical-align: middle;
+cursor: pointer;
+line-height: 1;
+font-weight: 100;
+color:#777;
+border:none;
+}
+#petfinder_search_rescue_container .psr__btn-group .btn span,
+#petfinder_search_rescue_container button,
+#petfinder_search_rescue_container #pet-adopt-btn .pet-adopt-btn-inner,
+#petfinder_search_rescue_container .psr__btn-group .onlyOption span{
+text-shadow:none;
+float: left;
+padding:0;
+font-size:13px;
+-webkit-appearance: none;
+text-align: center;
+color: #999;
+border: 0;
+-webkit-transition: .2s ease-out;
+transition: .2s ease-out;
+ padding: 5px 10px;
+  display: inline-block;
+  -webkit-border-radius: 6px!important;
+-moz-border-radius: 6px!important;
+border-radius: 6px!important;
+behavior: url(http://qaeim64/styleguide/css/glyphs/rounded-corners-ie8/PIE.htc);
+}
+#petfinder_search_rescue_container .psr__btn-group .btn .icon-website-name{display:none;}
+
+#petfinder_search_rescue_container .psr__btn-group .viewallbtn{background:none;margin-top:30px;}
+#petfinder_search_rescue_container .psr__btn-group .btn.viewallbtn{*width:75px;}/*ie7 only*/
+
+#petfinder_search_rescue_container .psr__hoverme:hover,
+#petfinder_search_rescue_container .psr__hoverme a:hover,
+#petfinder_search_rescue_container .psr__btn-group .btn:hover,
+#petfinder_search_rescue_container span.psr__hoverme:hover,
+#petfinder_search_rescue_container span.psr__hoverme:hover{
+	text-decoration: none!important;
+	cursor:pointer;
+	-moz-opacity: 0.7;
+-khtml-opacity: 0.7;
+opacity: 0.7;
+-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=70);
+filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+filter:alpha(opacity=70);
+	}
+#petfinder_search_rescue_container .psr__btn-group .btn.active span, #petfinder_search_rescue_container .btn:active span,
+#petfinder_search_rescue_container .psr__btn-group button.active span,
+#petfinder_search_rescue_container .psr__btn-group button:active span,
+#petfinder_search_rescue_container #pet-adopt-btn .pet-adopt-btn-inner,
+#petfinder_search_rescue_container .psr__btn-group .onlyOption span {
+  background-color: #F67D42;/*peach*/
+  color:#fff;
+}
+
+#petfinder_search_rescue_container #pet-adopt-btn .pet-adopt-btn-inner{padding:10px;}
+
+#petfinder_search_rescue_container #pet-adopt-btn .ico-psr_adopt{padding-right: 10px;}
+
+#petfinder_search_rescue_container .psr__btn-group .btn:active span,
+#petfinder_search_rescue_container .psr__btn-group button:active span {
+  -webkit-transition: none;
+  transition: none;
+}
+#petfinder_search_rescue_container .psr__btn-group.filter-group .btn {
+  position: relative;
+}
+#petfinder_search_rescue_container .psr__btn-group.filter-group .btn.active:before,
+#petfinder_search_rescue_container psr__btn-group.filter-group .btn.active:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  opacity: 0;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+#petfinder_search_rescue_container .filter-group .btn:before {
+  background-color: #2c3e50;
+  border-radius: 50%;
+}
+#petfinder_search_rescue_container .filter-group .btn:after {
+  -webkit-background-size: 60%;
+  background-size: 60%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(../img/check.svg);
+}
+#petfinder_search_rescue_container .filter-group .btn.active:before, #petfinder_search_rescue_container .filter-group .btn.active:after {
+  opacity: 1;
+}
+
+#petfinder_search_rescue_container .btn-minimize{
+     max-width: 250px;
+  width: 250px;
+  height: 35px;
+  color:#fff;
+  font-size:21px;
+  }
+    #petfinder_search_rescue_container .site-nav .btn {
+    margin-bottom: 5px;
+  }
+}
+
+
+#petfinder_search_rescue_container p#petfinder_down_message{text-align: center;margin: 50px 0;}
+#petfinder_search_rescue_container .poweredByPetfinder{text-align:center;}
+/************************************************************/
+
+
+@media (max-width: 1300px) {
+  #petfinder_search_rescue_container .psr__btn-group .btn{margin-bottom:10px;}
+  #petfinder_search_rescue_container .psr__btn-group .btn span{text-align:left;}
+  #petfinder_search_rescue_container .my-petInfoAll{width:60%;}
+
+}/*end media screen*/
+
+@media (max-width: 1200px) {
+   #petfinder_search_rescue_container .psr__btn-group .btn{font-size:12px;}
+   #petfinder_search_rescue_container .p_sr-pagetop-arrow{right:5px;bottom:15px;}
+   #petfinder_search_rescue_container #psr__grid.psr__row-fluid{margin:0 auto;}
+   /*.psr__header-title{padding-left:12px 0 0 5px;}*/
+   #petfinder_search_rescue_container .picture-item__glyph{height:100px;}
+   #petfinder_search_rescue_container #indiepet-popup.window-popup {width:90%;}
+   #petfinder_search_rescue_container input.filter__search {font-size:16px;}
+  }/*end media screen*/
+
+  @media (max-width: 1000px) {
+	  #petfinder_search_rescue_container p.filter__label {font-size:13px;}
+	   #petfinder_search_rescue_container .picture-item__glyph{height:80px;}
+	   #petfinder_search_rescue_container .picture-item__title{font-size:18px;}
+	   #petfinder_search_rescue_container .picture-item{height:210px;}
+	   #petfinder_search_rescue_container .picture-item .item__breed-tag{display:none;}
+#petfinder_search_rescue_container #toggle-petOptions-holder{padding:0;}
+#petfinder_search_rescue_container #psr__adoptform-btn, #petfinder_search_rescue_container #psr__adoptinfo-btn{width:40%;}
+#petfinder_search_rescue_container #petOptions-headline{font-size:14px;}
+#all-pet-options{position:relative;padding-bottom:0;}
+#petfinder_search_rescue_container .psr_container-pets{padding-top:0px;}
+#petfinder_search_rescue_container .my-petInfoAll{width:100%;}
+#petfinder_search_rescue_container .psr__header .psr__header-title,
+#petfinder_search_rescue_container .psr__header .toggle-petOptions-text{
+	display:none;
+	}
+#petfinder_search_rescue_container .psr__header #toggle-petOptions{ bottom: -7px; left:0;}
+#petfinder_search_rescue_container .window-popup{
+	overflow:auto!important;
+top:0!important;
+width: 100%!important;
+height: 100%!important;
+-webkit-border-radius: 0px;
+-moz-border-radius: 0px;
+border-radius: 0px;
+}
+#petfinder_search_rescue_container #pet-description pre.pf-description{
+overflow:visible;
+max-height:100%;
+}
+#petfinder_search_rescue_container .window-popup-topbtns span{
+font-size: 27px;
+}
+
+#petfinder_search_rescue_container #pet-adopt-btn{
+font-size:21px;
+top:50px;
+}
+
+#petfinder_search_rescue_container #pet-petfinder_url{
+position: absolute;
+top: 100px;
+right: 10px;
+}
+
+#petfinder_search_rescue_container .petOption-section{height:175px;}
+#petfinder_search_rescue_container .petOption-section ul{height:100px;}
+#petfinder_search_rescue_container .petOption-section .psr__btn-group .btn{margin:0;}
+#petfinder_search_rescue_container .petOption-section .psr__btn-group .btn span{padding:5px;}
+  }/*end media screen*/
+  @media (max-width: 900px) {
+  #petfinder_search_rescue_container #petOptions-headline{display:none;}
+  }
+  @media (max-width: 768px) {
+	  #petfinder_search_rescue_container p.filter__label {font-size:14px;}
+	  	#petfinder_search_rescue_container .picture-item__glyph{height:auto;}
+	  #petfinder_search_rescue_container .psr__header .psr__row-fluid > div[class*="span"]{width:33%;float:left;}
+	  #petfinder_search_rescue_container .picture-item img{width:50%;margin:auto;}
+#petfinder_search_rescue_container .petOption-section{height:100px;}
+#petfinder_search_rescue_container .petOption-section ul{height:42px;}
+#petfinder_search_rescue_container .petOption-section.breedOption-section{height:155px;}
+#petfinder_search_rescue_container .petOption-section.breedOption-section ul{height:90px;}
+#petfinder_search_rescue_container .picture-item__details{text-align:center;}
+
+#petfinder_search_rescue_container #search-icon{
+	font-size: 16px;
+padding: 9px 6px 0 0;
+}
+
+}/*end media screen*/
+
+ @media (max-width: 550px) {
+	 #petfinder_search_rescue_container #pet-multiphotos{
+		 		 width: 200px!important;
+max-width: 200px!important;
+height:200px!important;
+	 }
+	 #petfinder_search_rescue_container .nvgt{top:80px;}
+	 #petfinder_search_rescue_container #image_slider li img{
+		 width: 200px!important;
+max-width: 200px!important;
+#search-icon{display:none;}
+}
+
+ }
+
+@media (max-width: 47.9375em) {
+  #petfinder_search_rescue_container .picture-item {
+    height: auto;
+    margin-top: 20px;  }
+
+ #petfinder_search_rescue_container .picture-item .item__breed-tag{display:block;}
+  #petfinder_search_rescue_container .picture-item.picture-item--h2 {
+    height: auto;
+  }
+  #petfinder_search_rescue_container .picture-item .picture-item__details,
+  #petfinder_search_rescue_container .picture-item .picture-item__description {
+    font-size: .875em;
+    padding: .625em;
+  }
+  #petfinder_search_rescue_container .picture-item .picture-item__description {
+    padding-right: .875em;
+    padding-bottom: 1.25em;
+  }
+
+  #petfinder_search_rescue_container .filter > .psr__row-fluid,
+  #petfinder_search_rescue_container .filter > .psr__row-fluid > div {
+    margin: 10px 0;
+  }
+
+  #petfinder_search_rescue_container .m-nofloat {
+    float: none;
+  }
+}/*end media screen*/
+
+
+
+#petfinder_search_rescue_container hr{
+  margin:5px 0;
+  clear:both;
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+}
+
+/* Preloader */
+body{overflow:hidden;}
+#psr__preloader {
+position: absolute;
+top: 0;
+padding-top: 10%;
+text-align: center;
+left: 0;
+right: 0;
+bottom: 0;
+color:#fff;
+background-color:#F67D42;/*peach*/
+z-index: 80;/*make sure it stays on top*/
+font-size: 18px;
+font-weight: bold;
+}
+
+
+#preloader-icon {
+margin-top: 15px;
+background-image: url(preloader.gif);
+background-repeat: no-repeat;
+background-position: center;
+width: 100%;
+height: 20px;
+}
+
+/************FONTS**************/
+@font-face {
+	font-family: 'petfinder_sr';
+	src:url('fonts/petfinder_sr.eot?g75wpt');
+	src:url('fonts/petfinder_sr.eot?#iefixg75wpt') format('embedded-opentype'),
+	url('fonts/petfinder_sr.svg?g75wpt#petfinder_sr') format('svg'),
+		url('fonts/petfinder_sr.woff?g75wpt') format('woff'),
+		url('fonts/petfinder_sr.ttf?g75wpt') format('truetype');
+
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="ico-psr_"], [class*=" ico-psr_"] {
+	font-family: 'petfinder_sr';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.ico-psr_search:before {
+	content: "\e60c";
+}
+.ico-psr_up:before {
+	content: "\e600";
+}
+.ico-psr_show:before {
+	content: "\e601";
+}
+.ico-psr_right:before {
+	content: "\e602";
+}
+.ico-psr_previous:before {
+	content: "\e603";
+}
+.ico-psr_next:before {
+	content: "\e604";
+}
+.ico-psr_left:before {
+	content: "\e605";
+}
+.ico-psr_info:before {
+	content: "\e606";
+}
+.ico-psr_hide:before {
+	content: "\e607";
+}
+.ico-psr_down:before {
+	content: "\e608";
+}
+.ico-psr_close:before {
+	content: "\e609";
+}
+.ico-psr_application:before {
+	content: "\e60a";
+}
+.ico-psr_adopt:before {
+	content: "\e60b";
+}
