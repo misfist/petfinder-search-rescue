@@ -1,4 +1,4 @@
-﻿=== Petfinder: Search & Rescue ===
+﻿=== WordPress Petfinder Listing ===
 Contributors: chows305
 Tags: petfinder, adoptable pets
 Requires at least: 3.5
@@ -14,7 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 = Offering a filterable and searchable list of all animals at your shelter with no coding needed. =
 
-Petfinder: Search & Rescue offers a filterable and searchable list all of your animals that you have uploaded to your Petfinder account. Users can search by animal’s name, or check off their preferences for what type of pet they are looking for.  Each pet can be clicked on to display more information.  Customize colors, list adoption fees, and link to your adoption form.
+WordPress Petfinder Listing offers a filterable and searchable list all of your animals that you have uploaded to your Petfinder account. Users can search by animal’s name, or check off their preferences for what type of pet they are looking for.  Each pet can be clicked on to display more information.  Customize colors, list adoption fees, and link to your adoption form.
 
 
 = Features =
@@ -54,7 +54,7 @@ Under the Settings menu, click on Petfinder:Search and Rescue
 The widget displays a different photo of an animal from your shelter on every page.  Link to your adoption page and customize the look of the button.
 
 1. Under the Appearance menu, click on Widgets.  
-2. Drag Petfinder: Search & Rescue Widget into your sidebar.  Type in your shelter id, api key, and shelter name.  
+2. Drag WordPress Petfinder Listing Widget into your sidebar.  Type in your shelter id, api key, and shelter name.  
 3. For the button, type in your text and choose a color.  
 4. Type in the full link to your adoption page.  			
 	(Example - http://www.mywebsite.com/adoptable-pets)
@@ -83,8 +83,8 @@ The widget displays a different photo of an animal from your shelter on every pa
 	-You will need to generate a free Petfinder API key on Petfinder here: 		http://www.petfinder.com/developers/api-key. 
 	-Your shelter ID is your Petfinder username, usually your state abbreviation plus 		3 digits.
 5. Replace count with the number of animals you wish to display (more animals means more load time)
-6. Go to Settings -> Petfinder: Search & Rescue to customize colors, add link to adoption form, and add information about adopting at your shelter.
-7. Go to Appearance -> Widgets to add the Petfinder: Search & Rescue widget and link back to your adoptable pets (not required)
+6. Go to Settings -> WordPress Petfinder Listing to customize colors, add link to adoption form, and add information about adopting at your shelter.
+7. Go to Appearance -> Widgets to add the WordPress Petfinder Listing widget and link back to your adoptable pets (not required)
 
 == Frequently Asked Questions ==
 
