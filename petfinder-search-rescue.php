@@ -525,43 +525,43 @@ function get_petfinder_data( $api_key, $shelter_id, $count, $pet = '' ) {
  * @param  string $pet_type
  * @return string $pet_type
  */
- function get_pet_type( $pet_type ) {
- 	if ($pet_type == 'Dog') return 'Dog';
- 	if ($pet_type == 'Cat') return 'Cat';
- 	if ($pet_type == 'Small&amp;Furry') return 'Small & Furry';
- 	if ($pet_type == 'BarnYard') return 'Barnyard';
- 	if ($pet_type == 'Horse') return 'Horse';
- 	if ($pet_type == 'Pig') return 'Pig';
- 	if ($pet_type == 'Rabbit') return 'Rabbit';
- 	if ($pet_type == 'Reptile') return 'Scales, Fins & Other';
- 	return 'Not Known';
- }
+function get_pet_type( $pet_type ) {
+	if ($pet_type == 'Dog') return 'Dog';
+	if ($pet_type == 'Cat') return 'Cat';
+	if ($pet_type == 'Small&amp;Furry') return 'Small & Furry';
+	if ($pet_type == 'BarnYard') return 'Barnyard';
+	if ($pet_type == 'Horse') return 'Horse';
+	if ($pet_type == 'Pig') return 'Pig';
+	if ($pet_type == 'Rabbit') return 'Rabbit';
+	if ($pet_type == 'Reptile') return 'Scales, Fins & Other';
+	return 'Not Known';
+}
 
 /**
  * Parse Petfinder Return Values - Pet Size
  * @param  string $pet_size
  * @return string $pet_size
  */
- function get_pet_size( $pet_size ) {
- 	if ($pet_size == 'S') return 'Small';
- 	if ($pet_size == 'M') return 'Medium';
- 	if ($pet_size == 'L') return 'Large';
- 	if ($pet_size == 'XL') return 'Extra Large';
- 	return 'Not Known';
- }
+function get_pet_size( $pet_size ) {
+	if ($pet_size == 'S') return 'Small';
+	if ($pet_size == 'M') return 'Medium';
+	if ($pet_size == 'L') return 'Large';
+	if ($pet_size == 'XL') return 'Extra Large';
+	return 'Not Known';
+}
 
 /**
  * Parse Petfinder Return Values - Pet Age
  * @param  string $pet_age
  * @return string $pet_age
  */
- function get_pet_age( $pet_age ) {
- 	if ($pet_age == 'Baby') return 'Baby';
- 	if ($pet_age == 'Young') return 'Young';
- 	if ($pet_age == 'Adult') return 'Adult';
- 	if ($pet_age == 'Senior') return 'Senior';
- 	return 'Not Known';
- }
+function get_pet_age( $pet_age ) {
+	if ($pet_age == 'Baby') return 'Baby';
+	if ($pet_age == 'Young') return 'Young';
+	if ($pet_age == 'Adult') return 'Adult';
+	if ($pet_age == 'Senior') return 'Senior';
+	return 'Not Known';
+}
 
 /**
  * Parse Petfinder Return Values - Pet Gender
@@ -591,54 +591,57 @@ function get_pet_option( $pet_option ) {
 	//return 'Not Known';
 }
 
-
  // Convert plain text links to working links
- function get_text_links($text) {
+function get_text_links( $text ) {
 
- 	// Regex pattern
- 	$url_filter = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
+	// Regex pattern
+	$url_filter = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
 
- 	// If any URLs exist, convert them to links
- 	if ( preg_match( $url_filter, $text, $url ) ) {
- 		return preg_replace( $url_filter, '<a href="' . $url[0] . '" rel="nofollow">' . $url[0] . '</a>', $text );
- 	} else {
- 		return $text;
- 	}
- }
+	// If any URLs exist, convert them to links
+	if ( preg_match( $url_filter, $text, $url ) ) {
+		return preg_replace( $url_filter, '<a href="' . $url[0] . '" rel="nofollow">' . $url[0] . '</a>', $text );
+	} else {
+		return $text;
+	}
+}
 
- // Convert plain text email addresses to working links
- function get_text_emails($text) {
+// Convert plain text email addresses to working links
+function get_text_emails( $text ) {
 
- 	// Regex pattern
- 	$email_filter = '/([a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})/';
+	// Regex pattern
+	$email_filter = '/([a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})/';
 
- 	// If any emails exist, convert them to links
- 	if ( preg_match( $email_filter, $text, $email ) ) {
- 		return preg_replace( $email_filter, '<a href="mailto:' . $email[0] . '">' . $email[0] . '</a>', $text );
- 	} else {
- 		return $text;
- 	}
- }
-
+	// If any emails exist, convert them to links
+	if ( preg_match( $email_filter, $text, $email ) ) {
+		return preg_replace( $email_filter, '<a href="mailto:' . $email[0] . '">' . $email[0] . '</a>', $text );
+	} else {
+		return $text;
+	}
+}
 
  /* =============================================================
  	PET NAME CLEANUP
  	Remove any special characters from pet names
   * ============================================================= */
+/**
+ * Sanitize Pet Names
+ * @param  string $pet_name
+ * @return string $pet_name
+ */
+function get_pet_name( $pet_name ) {
 
- function get_pet_name($pet_name) {
+	// Clean-up pet name
+	// $pet_name = array_shift(explode('-', $pet_name)); // Remove '-' from animal names
+	// $pet_name = array_shift(explode('(', $pet_name)); // Remove '(...)' from animal names
+	// $pet_name = array_shift(explode('[', $pet_name)); // Remove '[...]' from animal names
+	//$pet_name = ; // Transform names to lowercase
+	$pet_name = wp_strip_all_tags( $pet_name );
+	$pet_name = ucwords( strtolower( $pet_name ) );
 
- 	// Clean-up pet name
- 	$pet_name = array_shift(explode('-', $pet_name)); // Remove '-' from animal names
- 	$pet_name = array_shift(explode('(', $pet_name)); // Remove '(...)' from animal names
- 	$pet_name = array_shift(explode('[', $pet_name)); // Remove '[...]' from animal names
- 	$pet_name = strtolower($pet_name); // Transform names to lowercase
- 	$pet_name = ucwords($pet_name); // Capitalize the first letter of each name
+	// Return pet name
+	return $pet_name;
 
- 	// Return pet name
- 	return $pet_name;
-
- }
+}
 
 
  /* =============================================================
