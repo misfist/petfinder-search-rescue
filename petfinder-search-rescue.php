@@ -42,8 +42,17 @@ function psr_enqueue_color_picker() {
 }
 add_action( 'admin_enqueue_scripts', 'psr_enqueue_color_picker' );
 
-
 // Public Scripts
+function wp_petfinder_listing_enqueue_scripts() {
+	wp_register_script( 'modernizr', plugin_dir_url( __FILE__ ) . 'js/modernizr.custom.min.js', array( 'jquery' ), false, false );
+	wp_register_script( 'jquery-shuffle', plugin_dir_url( __FILE__ ) . 'js/jquery.shuffle.js', array( 'modernizr' ), false, false );
+	wp_register_script( 'wp-finder-listing-public-home', plugin_dir_url( __FILE__ ) . 'js/homepage.js', array( 'jquery', 'modernizr' ), false, false );
+
+	wp_enqueue_script( 'modernizr' );
+	wp_enqueue_script( 'jquery-shuffle' );
+	wp_enqueue_script( 'wp-finder-listing-home-script' );
+}
+//add_action( 'wp_enqueue_scripts', 'wp_petfinder_listing_enqueue_scripts' );
 
 /**
  * Options Page
@@ -775,10 +784,11 @@ function get_type_list($pets) {
 	// Define Variables
 	$types = '';
 	$type_list = '';
+	$startContainerOutput = '';
 
 	// Create a list of types of pets
 	foreach( $pets as $pet ) {
-		$types .= get_pet_type($pet->animal) . "|";
+		$types .= get_pet_type( $pet->animal ) . "|";
 	}
 
 	// Remove duplicates, convert into an array, and alphabetize
@@ -798,11 +808,9 @@ function get_type_list($pets) {
 
 	//////////////RETURN THE TYPE LIST (including start of psr_container-pets container)///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	//grab admin option vars
+	  	//grab admin option vars
 	add_option("petfinder-search-and-rescue", $pet_sr_options);
 	$pet_sr_options = get_option('petfinder-search-and-rescue');
-
-	$startContainerOutput = '';
 
 	$startContainerOutput .= '<div class="psr_container-pets">';
 	//all pet options
@@ -997,29 +1005,27 @@ function get_breed_list($pets) {
 
 	//////////////RETURN THE BREED LIST (including start of psr__grid)///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$breedListOutput = '';
+	$breedListOutput.= '<div class="psr__span7 breedOption-section petOption-section">';
+    $breedListOutput.= '<p class="filter__label">Breed</p>';
+    $breedListOutput.= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
+	$breedListOutput.= $breed_list;
+	$breedListOutput.= '</ul>';//end btn-group
+	$breedListOutput.= '</div>';//end SPAN
 
-	$breedListOutput .= '<div class="psr__span7 breedOption-section petOption-section">';
-    $breedListOutput .= '<p class="filter__label">Breed</p>';
-    $breedListOutput .= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
-	$breedListOutput .= $breed_list;
-	$breedListOutput .= '</ul>';//end btn-group
-	$breedListOutput .= '</div>';//end SPAN
+	$breedListOutput.= '<div class="psr__span1">';
+	$breedListOutput.= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput.= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
+	$breedListOutput.= '</ul>';
+	$breedListOutput.= '</div>';//end span
+	$breedListOutput.= '</div>';//end row
+	$breedListOutput.= '</div>';//end pet options
 
-	$breedListOutput .= '<div class="psr__span1">';
-	$breedListOutput .= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput .= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
-	$breedListOutput .= '</ul>';
-	$breedListOutput .= '</div>';//end span
-	$breedListOutput .= '</div>';//end row
-	$breedListOutput .= '</div>';//end pet options
-
-	$breedListOutput .= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
-	$breedListOutput .= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
+	$breedListOutput.= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
+	$breedListOutput.= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
 
 	//START GRID
-	$breedListOutput .= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
+	$breedListOutput.= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
 		return $breedListOutput;
 	}
 
@@ -1034,6 +1040,7 @@ function get_size_list($pets) {
 	// Define Variables
 	$sizes = '';
 	$size_list = '';
+	$sizeListOutput = '';
 
 	// Create a list of pet sizes
 	foreach( $pets as $pet ) {
@@ -1057,8 +1064,6 @@ function get_size_list($pets) {
 
 	////////////////////////////////RETURN THE SIZE LIST //////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$sizeListOutput = '';
-
 	$sizeListOutput .= '<div class="psr__span3 petOption-section">';
     $sizeListOutput .= '<p class="filter__label">Size</p>';
     $sizeListOutput .= '<ul class="filter-options psr__btn-group">';
@@ -1103,15 +1108,14 @@ function get_age_list($pets) {
 	}
 
 	//////////////////////////////////RETURN THE AGE LIST /////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////
-
-	$ageListOutput .= '<div class="psr__span3 petOption-section">';
-    $ageListOutput .= '<p class="filter__label">Age</p>';
-    $ageListOutput .= '<ul class="filter-options psr__btn-group">';
-	$ageListOutput .= $age_list;
-	$ageListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Age</span></li>';
-	$ageListOutput .= '</ul>';//end btn-group
-	$ageListOutput .= '</div>';//end span
+	///////////////////////////////////////////////////////////////////////////////////////////
+	$ageListOutput .=  '<div class="psr__span3 petOption-section">';
+    $ageListOutput .=  '<p class="filter__label">Age</p>';
+    $ageListOutput .=  '<ul class="filter-options psr__btn-group">';
+	$ageListOutput .=  $age_list;
+	$ageListOutput .=  '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Age</span></li>';
+	$ageListOutput .=  '</ul>';//end btn-group
+	$ageListOutput .=  '</div>';//end span
 
 	return $ageListOutput;
 }
@@ -1126,6 +1130,7 @@ function get_gender_list($pets) {
 	// Define Variables
 	$genders = '';
 	$gender_list = '';
+	$genderListOutput = '';
 
 	// Create a list available pet genders
 	foreach( $pets as $pet ) {
@@ -1147,8 +1152,6 @@ function get_gender_list($pets) {
 
 	/////////////////////////////////////RETURN THE GENDER LIST ////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$genderListOutput = '';
-
 	$genderListOutput .= '<div class="psr__span3 petOption-section">';
 	$genderListOutput .= '<p class="filter__label">Gender</p>';
 	$genderListOutput .= '<ul class="filter-options psr__btn-group OR-psr__btn-group">';
@@ -1175,6 +1178,7 @@ function get_options_list($pets) {
 	// Define Variables
 	$options = '';
 	$options_list = '';
+	$optionsListOutput = '';
 
 	// Create a list of pet options and special needs
 	foreach( $pets as $pet ) {
@@ -1183,7 +1187,6 @@ function get_options_list($pets) {
 			$options .= get_pet_option($pet_option) . "|";
 		}
 	}
-
 
 	// Remove duplicates, convert into an array and reverse list order
 	$options = array_reverse(array_filter(array_unique(explode('|', $options))));
@@ -1198,10 +1201,8 @@ function get_options_list($pets) {
 		//$options_list .= '<li class="btn " data-group='.$option_condensed.'><span>'.$option_condensed.'</span></li>';
 	}
 
-//////////////DISPLAY OPTIONS/SPECIAL NEEDS LIST - NOT INCLUDED: SPAYED/UP TO DTE ON SHOTS IN TAGS///////
+	//////////////DISPLAY OPTIONS/SPECIAL NEEDS LIST - NOT INCLUDED: SPAYED/UP TO DTE ON SHOTS IN TAGS///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$optionsListOutput = '';
-
 	$optionsListOutput .= '<div class="psr__row-fluid">';
 	$optionsListOutput .= '<div class="psr__span3 petOption-section">';
 	$optionsListOutput .= '<p class="filter__label">Looking for...</p>';
@@ -1354,7 +1355,9 @@ function get_pet_options_list_data_groups($pet) {
 	Get a list of all available pets.
  * ============================================================= */
 
-function get_all_pets($pets) {
+function get_all_pets( $pets ) {
+
+	$pet_list = '';
 
 	foreach( $pets as $pet ) {
 
@@ -1389,11 +1392,10 @@ function get_all_pets($pets) {
 		}
 
 /* =============================================================
- * PICTURE-ITEM CONTAINER FOR EACH PET
- * Contains Pet title, photo, description, tags
- * Takes attributes and places them into classes/data-groups
+	PICTURE-ITEM CONTAINER FOR EACH PET
+	Contains Pet title, photo, description, tags
+	Takes attributes and places them into classes/data-groups
  * ============================================================= */
-		$pet_list = '';
 
 		$pet_list .=    '<div class="psr__span2 picture-item shuffle-item filtered ' . pet_value_condensed($breed) . ' ' . $pet_optionClasses . ' ' . pet_value_condensed($pet_type) . ' ' . pet_value_condensed($pet_size) . ' ' . pet_value_condensed($pet_age) . ' ' . pet_value_condensed($pet_gender) .'" data-groups="[&quot;'. pet_value_condensed($breed) . '&quot;,' . $pet_optionDataGroups . '&quot;'. pet_value_condensed($pet_type) . '&quot;,&quot;' . pet_value_condensed($pet_size) . '&quot;,&quot;' . pet_value_condensed($pet_age) . '&quot;,&quot;' . pet_value_condensed($pet_gender) .'&quot;]" data-title="'. $pet_name .'">
 
@@ -1420,9 +1422,10 @@ function get_all_pets($pets) {
 </div>
 
 <!-- Filter js files -->
-<script type="text/javascript" src="' .plugins_url("js/jquery.shuffle.js", __FILE__ ).'"></script>
-<script type="text/javascript" src="' .plugins_url("js/homepage.js", __FILE__ ).'"></script>
-</div><div class="poweredByPetfinder">Powered by <a href="https://www.petfinder.com/">Petfinder.com</a></div></div><!--end petfinder search & rescue container--></div>';
+<script type="text/javascript" src="' . plugins_url( "js/jquery.shuffle.js", __FILE__  ) . '"></script>
+<script type="text/javascript" src="' . plugins_url( "js/homepage.js", __FILE__  ) . '"></script>
+
+</div><div class="poweredByPetfinder">Powered by <a href="https://www.petfinder.com">Petfinder.com</a></div></div><!--end petfinder search & rescue container--></div>';
 
 
 	// Return pet list
