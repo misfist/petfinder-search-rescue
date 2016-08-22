@@ -1082,6 +1082,7 @@ function get_age_list($pets) {
 	// Define Variables
 	$ages = '';
 	$age_list = '';
+	$ageListOutput = '';
 
 	// Create a list of pet ages
 	foreach( $pets as $pet ) {
@@ -1102,8 +1103,7 @@ function get_age_list($pets) {
 	}
 
 	//////////////////////////////////RETURN THE AGE LIST /////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////
-	$ageListOutput = '';
+	//////////////////////////////////////////////////////////////////////////////////////////
 
 	$ageListOutput .= '<div class="psr__span3 petOption-section">';
     $ageListOutput .= '<p class="filter__label">Age</p>';
