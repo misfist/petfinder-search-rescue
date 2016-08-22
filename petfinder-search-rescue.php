@@ -798,30 +798,32 @@ function get_type_list($pets) {
 
 	//////////////RETURN THE TYPE LIST (including start of psr_container-pets container)///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	  	//grab admin option vars
+	//grab admin option vars
 	add_option("petfinder-search-and-rescue", $pet_sr_options);
-$pet_sr_options = get_option('petfinder-search-and-rescue');
-	$startContainerOutput.= '<div class="psr_container-pets">';
+	$pet_sr_options = get_option('petfinder-search-and-rescue');
+
+	$startContainerOutput = '';
+
+	$startContainerOutput .= '<div class="psr_container-pets">';
 	//all pet options
 	if ($pet_sr_options['psr_optionssection_remove']=='on' || $pet_sr_options['psr_hideoptionssection_default']=='on'){
-    $startContainerOutput.= '<div id="all-pet-options" style="display:none;">';
+	    $startContainerOutput .= '<div id="all-pet-options" style="display:none;">';
 	}
 	else {
-	$startContainerOutput.= '<div id="all-pet-options">';
+		$startContainerOutput .= '<div id="all-pet-options">';
 	}
 
+	$startContainerOutput .= '<div class="psr__row-fluid">';
 
-        $startContainerOutput.= '<div class="psr__row-fluid">';
+	$startContainerOutput .= '<div class="psr__span3 petOption-section">';
+	$startContainerOutput .= '<p class="filter__label">Type</p>';
+	$startContainerOutput .= '<ul class="filter-options psr__btn-group OR-psr__btn-group">';
+	$startContainerOutput .= $type_list;
+	$startContainerOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Type</span></li>';
+	$startContainerOutput .= '</ul>';//end btn-group
+	$startContainerOutput .= '</div>';//end span
 
-        	$startContainerOutput.= '<div class="psr__span3 petOption-section">';
-            	$startContainerOutput.= '<p class="filter__label">Type</p>';
-            	$startContainerOutput.= '<ul class="filter-options psr__btn-group OR-psr__btn-group">';
-				$startContainerOutput.= $type_list;
-				$startContainerOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Type</span></li>';
-				$startContainerOutput.= '</ul>';//end btn-group
-			$startContainerOutput.= '</div>';//end span
-
-			return $startContainerOutput;
+	return $startContainerOutput;
 }
 
 /* =============================================================
@@ -995,27 +997,29 @@ function get_breed_list($pets) {
 
 	//////////////RETURN THE BREED LIST (including start of psr__grid)///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$breedListOutput.= '<div class="psr__span7 breedOption-section petOption-section">';
-    $breedListOutput.= '<p class="filter__label">Breed</p>';
-    $breedListOutput.= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
-	$breedListOutput.= $breed_list;
-	$breedListOutput.= '</ul>';//end btn-group
-	$breedListOutput.= '</div>';//end SPAN
+	$breedListOutput = '';
 
-	$breedListOutput.= '<div class="psr__span1">';
-	$breedListOutput.= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput.= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
-	$breedListOutput.= '</ul>';
-	$breedListOutput.= '</div>';//end span
-	$breedListOutput.= '</div>';//end row
-	$breedListOutput.= '</div>';//end pet options
+	$breedListOutput .= '<div class="psr__span7 breedOption-section petOption-section">';
+    $breedListOutput .= '<p class="filter__label">Breed</p>';
+    $breedListOutput .= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
+	$breedListOutput .= $breed_list;
+	$breedListOutput .= '</ul>';//end btn-group
+	$breedListOutput .= '</div>';//end SPAN
 
-	$breedListOutput.= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
-	$breedListOutput.= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
+	$breedListOutput .= '<div class="psr__span1">';
+	$breedListOutput .= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput .= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
+	$breedListOutput .= '</ul>';
+	$breedListOutput .= '</div>';//end span
+	$breedListOutput .= '</div>';//end row
+	$breedListOutput .= '</div>';//end pet options
+
+	$breedListOutput .= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
+	$breedListOutput .= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
 
 	//START GRID
-	$breedListOutput.= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
+	$breedListOutput .= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
 		return $breedListOutput;
 	}
 
@@ -1053,14 +1057,17 @@ function get_size_list($pets) {
 
 	////////////////////////////////RETURN THE SIZE LIST //////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
-		$sizeListOutput.= '<div class="psr__span3 petOption-section">';
-        $sizeListOutput.= '<p class="filter__label">Size</p>';
-        $sizeListOutput.= '<ul class="filter-options psr__btn-group">';
-		$sizeListOutput.= $size_list;
-		$sizeListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Size</span></li>';
-		$sizeListOutput.= '</ul>';//end btn-group
-		$sizeListOutput.= '</div>';//end span
-		return $sizeListOutput;
+	$sizeListOutput = '';
+
+	$sizeListOutput .= '<div class="psr__span3 petOption-section">';
+    $sizeListOutput .= '<p class="filter__label">Size</p>';
+    $sizeListOutput .= '<ul class="filter-options psr__btn-group">';
+	$sizeListOutput .= $size_list;
+	$sizeListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Size</span></li>';
+	$sizeListOutput .= '</ul>';//end btn-group
+	$sizeListOutput .= '</div>';//end span
+
+	return $sizeListOutput;
 
 }
 
@@ -1096,14 +1103,17 @@ function get_age_list($pets) {
 
 	//////////////////////////////////RETURN THE AGE LIST /////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$ageListOutput.= '<div class="psr__span3 petOption-section">';
-    $ageListOutput.= '<p class="filter__label">Age</p>';
-    $ageListOutput.= '<ul class="filter-options psr__btn-group">';
-	$ageListOutput.= $age_list;
-	$ageListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Age</span></li>';
-	$ageListOutput.= '</ul>';//end btn-group
-	$ageListOutput.= '</div>';//end span
-		return $ageListOutput;
+	$ageListOutput = '';
+
+	$ageListOutput .= '<div class="psr__span3 petOption-section">';
+    $ageListOutput .= '<p class="filter__label">Age</p>';
+    $ageListOutput .= '<ul class="filter-options psr__btn-group">';
+	$ageListOutput .= $age_list;
+	$ageListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Any Age</span></li>';
+	$ageListOutput .= '</ul>';//end btn-group
+	$ageListOutput .= '</div>';//end span
+
+	return $ageListOutput;
 }
 
 /* =============================================================
@@ -1137,15 +1147,18 @@ function get_gender_list($pets) {
 
 	/////////////////////////////////////RETURN THE GENDER LIST ////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////
-		$genderListOutput.= '<div class="psr__span3 petOption-section">';
-            	$genderListOutput.= '<p class="filter__label">Gender</p>';
-            	$genderListOutput.= '<ul class="filter-options psr__btn-group OR-psr__btn-group">';
-					$genderListOutput.= $gender_list;
-					$genderListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Both</span></li>';
-				$genderListOutput.= '</ul>';//end btn-group
-			$genderListOutput.= '</div>';//end span
-			$genderListOutput.= '</div>';//end row
-		return $genderListOutput;
+	$genderListOutput = '';
+
+	$genderListOutput .= '<div class="psr__span3 petOption-section">';
+	$genderListOutput .= '<p class="filter__label">Gender</p>';
+	$genderListOutput .= '<ul class="filter-options psr__btn-group OR-psr__btn-group">';
+	$genderListOutput .= $gender_list;
+	$genderListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">Both</span></li>';
+	$genderListOutput .= '</ul>';//end btn-group
+	$genderListOutput .= '</div>';//end span
+	$genderListOutput .= '</div>';//end row
+
+	return $genderListOutput;
 }
 
 
@@ -1187,18 +1200,21 @@ function get_options_list($pets) {
 
 //////////////DISPLAY OPTIONS/SPECIAL NEEDS LIST - NOT INCLUDED: SPAYED/UP TO DTE ON SHOTS IN TAGS///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-		$optionsListOutput.= '<div class="psr__row-fluid">';
-        	$optionsListOutput.= '<div class="psr__span3 petOption-section">';
-            $optionsListOutput.= '<p class="filter__label">Looking for...</p>';
-            $optionsListOutput.= '<ul class="filter-options psr__btn-group lookingFor-optionGroup">';
-			$optionsListOutput.= '<li class="btn " data-group="dog-friendly"><span class="psr__hoverme">Kid Friendly</span></li>';
-			$optionsListOutput.= '<li class="btn " data-group="cat-friendly"><span class="psr__hoverme">Cat Friendly</span></li>';
-			$optionsListOutput.= '<li class="btn " data-group="kid-friendly"><span class="psr__hoverme">Dog Friendly</span></li>';
-			$optionsListOutput.= '<li class="btn " data-group="special-needs"><span class="psr__hoverme">Special Needs</span></li>';
-			$optionsListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All</span></li>';
-			$optionsListOutput.= '</ul>';//end btn-group
-			$optionsListOutput.= '</div>';//end span
-		return $optionsListOutput;
+	$optionsListOutput = '';
+
+	$optionsListOutput .= '<div class="psr__row-fluid">';
+	$optionsListOutput .= '<div class="psr__span3 petOption-section">';
+	$optionsListOutput .= '<p class="filter__label">Looking for...</p>';
+	$optionsListOutput .= '<ul class="filter-options psr__btn-group lookingFor-optionGroup">';
+	$optionsListOutput .= '<li class="btn " data-group="dog-friendly"><span class="psr__hoverme">Kid Friendly</span></li>';
+	$optionsListOutput .= '<li class="btn " data-group="cat-friendly"><span class="psr__hoverme">Cat Friendly</span></li>';
+	$optionsListOutput .= '<li class="btn " data-group="kid-friendly"><span class="psr__hoverme">Dog Friendly</span></li>';
+	$optionsListOutput .= '<li class="btn " data-group="special-needs"><span class="psr__hoverme">Special Needs</span></li>';
+	$optionsListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All</span></li>';
+	$optionsListOutput .= '</ul>';//end btn-group
+	$optionsListOutput .= '</div>';//end span
+
+	return $optionsListOutput;
 }
 
 /* =============================================================
@@ -1373,10 +1389,11 @@ function get_all_pets($pets) {
 		}
 
 /* =============================================================
-	PICTURE-ITEM CONTAINER FOR EACH PET
-	Contains Pet title, photo, description, tags
-	Takes attributes and places them into classes/data-groups
+ * PICTURE-ITEM CONTAINER FOR EACH PET
+ * Contains Pet title, photo, description, tags
+ * Takes attributes and places them into classes/data-groups
  * ============================================================= */
+		$pet_list = '';
 
 		$pet_list .=    '<div class="psr__span2 picture-item shuffle-item filtered ' . pet_value_condensed($breed) . ' ' . $pet_optionClasses . ' ' . pet_value_condensed($pet_type) . ' ' . pet_value_condensed($pet_size) . ' ' . pet_value_condensed($pet_age) . ' ' . pet_value_condensed($pet_gender) .'" data-groups="[&quot;'. pet_value_condensed($breed) . '&quot;,' . $pet_optionDataGroups . '&quot;'. pet_value_condensed($pet_type) . '&quot;,&quot;' . pet_value_condensed($pet_size) . '&quot;,&quot;' . pet_value_condensed($pet_age) . '&quot;,&quot;' . pet_value_condensed($pet_gender) .'&quot;]" data-title="'. $pet_name .'">
 
