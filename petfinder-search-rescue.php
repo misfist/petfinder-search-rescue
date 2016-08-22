@@ -1399,19 +1399,36 @@ function get_all_pets( $pets ) {
 	Takes attributes and places them into classes/data-groups
  * ============================================================= */
 
-		$pet_list .=    '<div class="psr__span2 picture-item shuffle-item filtered ' . pet_value_condensed($breed) . ' ' . $pet_optionClasses . ' ' . pet_value_condensed($pet_type) . ' ' . pet_value_condensed($pet_size) . ' ' . pet_value_condensed($pet_age) . ' ' . pet_value_condensed($pet_gender) .'" data-groups="[&quot;'. pet_value_condensed($breed) . '&quot;,' . $pet_optionDataGroups . '&quot;'. pet_value_condensed($pet_type) . '&quot;,&quot;' . pet_value_condensed($pet_size) . '&quot;,&quot;' . pet_value_condensed($pet_age) . '&quot;,&quot;' . pet_value_condensed($pet_gender) .'&quot;]" data-title="'. $pet_name .'">
+	$classes = implode( ' ', array(
+		pet_value_condensed( $breed ),
+		pet_value_condensed( $pet_type ),
+		pet_value_condensed( $pet_size ),
+		pet_value_condensed( $pet_age ),
+		pet_value_condensed( $pet_gender ),
+		$pet_optionClasses
+	) );
+
+	$data_atts = implode( '&quot;,&quot;', array(
+		pet_value_condensed( $breed ),
+		pet_value_condensed( $pet_type ),
+		pet_value_condensed( $pet_size ),
+		pet_value_condensed( $pet_age ),
+		pet_value_condensed( $pet_gender )
+	) );
+
+	$pet_list .=    '<div class="psr__span2 picture-item shuffle-item filtered ' . $classes .'" data-groups="[' . $pet_optionDataGroups . '&quot;' . $data_atts . '&quot;]" data-title="'. $pet_name .'">
 
   <div class="picture-item__inner">
     <div class="picture-item__glyph">' .$pet_photo_thumbnail . '</div>
 	<div class="picture-item__details clearfix">
       <div class="picture-item__title">'.$pet_name.'</div>
 	  <div class="picture-item__tags">
-	  '. pet_value_condensed($pet_type) .', '. pet_value_condensed($pet_age) .', '. pet_value_condensed($pet_gender) .', '. pet_value_condensed($pet_size) .'<p class="item__breed-tag">'. pet_value_condensed($breed) .'</p></div>
+	  '. pet_value_condensed( $pet_type ) .', '. pet_value_condensed( $pet_age ) .', '. pet_value_condensed( $pet_gender ) .', '. pet_value_condensed( $pet_size ) .'<p class="item__breed-tag">'. pet_value_condensed( $breed ) .'</p></div>
 	  <!--hidden pet information-->
 	  <div class="picture-item__more-details" style="display:none">
 
 			<div class="my-pet-options">' . $pet_options . '</div>' .
-			'<div class="my-pet-attributes"><span>'. pet_value_condensed($pet_type) .'</span><span>'. pet_value_condensed($pet_age) .'</span><span>'. pet_value_condensed($pet_gender) .'</span><span>'. pet_value_condensed($pet_size) .'</span><span>'. pet_value_condensed($breed) .'</span></div>'.
+			'<div class="my-pet-attributes"><span>'. pet_value_condensed($pet_type) .'</span><span>'. pet_value_condensed( $pet_age ) .'</span><span>'. pet_value_condensed( $pet_gender ) .'</span><span>'. pet_value_condensed( $pet_size ) .'</span><span>'. pet_value_condensed( $breed ) .'</span></div>'.
 			'<div class="my-pet-petfinder_url"><a href="' . $pet_pf_url . '">Petfinder Link</a></div>' .
 			'<div class="my-pet-description">' . $pet_description . '</div>' .
 			'<div class="my-pet-photos"><ul id="image_slider">' . $pet_photo_all . '</ul><span class="nvgt ico-psr_previous" id="prev"></span>
@@ -1442,7 +1459,7 @@ function get_all_pets( $pets ) {
 	Vars are shelter id, api key, and count.
  * ============================================================= */
 
-function display_petfinder_search_rescue($atts) {
+function display_petfinder_search_rescue( $atts ) {
 
 	// Extract shortcode values
 	extract(shortcode_atts(array(
