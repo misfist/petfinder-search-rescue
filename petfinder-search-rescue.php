@@ -34,11 +34,13 @@ include( dirname(__FILE__) . '/widget/petfinder-search-rescue-widget.php' );
  */
 // Admin Scripts
 function psr_enqueue_color_picker() {
-    wp_register_style( 'petfinder-listing-rows', plugins_url( 'css/psr_rows_styles.css', __FILE__ ) );
+    wp_register_style( 'petfinder-listing-rows', plugin_dir_url( __FILE__ ) . 'css/psr_rows_styles.css' );
 
-    wp_enqueue_style( 'wp-color-picker' );
-    wp_enqueue_script( 'psr-script-handle', plugins_url( '/js/my-script.js', __FILE__ ), array( 'wp-color-picker', 'jquery' ), false, true );
+	wp_register_script( 'psr-admin-script', plugin_dir_url( __FILE__ ) . '/js/my-script.js', array( 'wp-color-picker', 'jquery' ), false, true );
+
+    // wp_enqueue_style( 'wp-color-picker' );
 	wp_enqueue_style( 'petfinder-listing-rows' );
+    wp_enqueue_script( 'psr-admin-script' );
 }
 add_action( 'admin_enqueue_scripts', 'psr_enqueue_color_picker' );
 
@@ -159,7 +161,7 @@ function pet_sr_options_page() {
 		$pet_sr_options['psr_adoptbtntext_popup'] = '#fff';
 		update_option('petfinder-search-and-rescue', $pet_sr_options);
 
-	echo '<div class=\"notice notice-warning is-dismissible\"><p>' . __( 'Colors have been reset to original default values', 'wp-petfinder-listing' ) . '</p></div>';
+	echo '<div class="notice notice-warning is-dismissible"><p>' . __( 'Colors have been reset to original default values', 'wp-petfinder-listing' ) . '</p></div>';
 	}
 
 	//If saved, store values
@@ -196,7 +198,7 @@ function pet_sr_options_page() {
 
         update_option('petfinder-search-and-rescue', $pet_sr_options);
 
-        echo '<div class=\"notice notice-success is-dismissible\"><p>' . __( 'Your changes have been saved successfully!', 'wp-petfinder-listing' ) . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>' . __( 'Your changes have been saved successfully!', 'wp-petfinder-listing' ) . '</p></div>';
     }
     ?>
 	<!-- =============================================================
@@ -208,8 +210,8 @@ function pet_sr_options_page() {
 		<div class="psr__options-settings-instructions">
 			<div class="psr__row-fluid">
 				<div class="psr__span12">
-					<p>PLACE THIS SHORTCODE ON YOUR PAGE: </p>
-					<p>[petfinder_search_rescue api_key="YOUR API KEY" shelter_id="YOUR SHELTER ID" count="100"]</p>
+					<p><?php _e( 'Use the shortcode below to display the listing in a post or page.', 'wp-petfinder-listing' ); ?></p>
+					<p><pre>[wp-petfinder-listing api_key="YOUR API KEY" shelter_id="YOUR SHELTER ID" count="100"]</pre></p>
 				</div>
 			</div>
 		</div>
@@ -221,7 +223,6 @@ function pet_sr_options_page() {
 
 			if ( function_exists( 'wp_nonce_field' ) )
 			wp_nonce_field( 'petfinder-search-and-rescue-update_settings' );  ?>
-
 
 			<div class="psr_style-options-section">
 				<div class="psr__row-fluid">
@@ -981,6 +982,7 @@ function get_breed_list($pets) {
 	// Define Variables
 	$breeds = '';
 	$breed_list = '';
+	$breedListOutput = '';
 
 	// Get a list of breeds for each pet
 	foreach( $pets as $pet ) {
@@ -1005,27 +1007,27 @@ function get_breed_list($pets) {
 
 	//////////////RETURN THE BREED LIST (including start of psr__grid)///////
 	///////////////////////////////////////////////////////////////////////////////////////////
-	$breedListOutput.= '<div class="psr__span7 breedOption-section petOption-section">';
-    $breedListOutput.= '<p class="filter__label">Breed</p>';
-    $breedListOutput.= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput.= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
-	$breedListOutput.= $breed_list;
-	$breedListOutput.= '</ul>';//end btn-group
-	$breedListOutput.= '</div>';//end SPAN
+	$breedListOutput .= '<div class="psr__span7 breedOption-section petOption-section">';
+    $breedListOutput .= '<p class="filter__label">Breed</p>';
+    $breedListOutput .= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput .= '<li class="btn  allbtn" data-group="all"><span class="psr__hoverme">All Breeds</span></li>';
+	$breedListOutput .= $breed_list;
+	$breedListOutput .= '</ul>';//end btn-group
+	$breedListOutput .= '</div>';//end SPAN
 
-	$breedListOutput.= '<div class="psr__span1">';
-	$breedListOutput.= '<ul class="filter-options psr__btn-group">';
-	$breedListOutput.= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
-	$breedListOutput.= '</ul>';
-	$breedListOutput.= '</div>';//end span
-	$breedListOutput.= '</div>';//end row
-	$breedListOutput.= '</div>';//end pet options
+	$breedListOutput .= '<div class="psr__span1">';
+	$breedListOutput .= '<ul class="filter-options psr__btn-group">';
+	$breedListOutput .= '<li class="btn  viewallbtn" data-group="all"><span class="psr__hoverme">Reset</span></li>';
+	$breedListOutput .= '</ul>';
+	$breedListOutput .= '</div>';//end span
+	$breedListOutput .= '</div>';//end row
+	$breedListOutput .= '</div>';//end pet options
 
-	$breedListOutput.= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
-	$breedListOutput.= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
+	$breedListOutput .= '<div id="noPetsCriteria-msg" class="noPetsFound-msg">Sorry, no pets were found with your search criteria.  Keep looking :)</div>';
+	$breedListOutput .= '<div id="noPetsName-msg" class="noPetsFound-msg">Sorry, no pets were found with that name.  Keep looking :)</div>';
 
 	//START GRID
-	$breedListOutput.= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
+	$breedListOutput .= '<div id="psr__grid" class="psr__row-fluid psr__m-row shuffle--container shuffle--fluid shuffle" style="transition: height 250ms ease-out; -webkit-transition: height 250ms ease-out; height: 1220px;">';
 		return $breedListOutput;
 	}
 
@@ -1035,7 +1037,7 @@ function get_breed_list($pets) {
 	List of available size of pets.
  * ============================================================= */
 
-function get_size_list($pets) {
+function get_size_list( $pets ) {
 
 	// Define Variables
 	$sizes = '';
@@ -1082,7 +1084,7 @@ function get_size_list($pets) {
 	List of available pet ages.
  * ============================================================= */
 
-function get_age_list($pets) {
+function get_age_list( $pets ) {
 
 	// Define Variables
 	$ages = '';
@@ -1125,7 +1127,7 @@ function get_age_list($pets) {
 	List of available pet genders.
  * ============================================================= */
 
-function get_gender_list($pets) {
+function get_gender_list( $pets ) {
 
 	// Define Variables
 	$genders = '';
@@ -1144,7 +1146,7 @@ function get_gender_list($pets) {
 	foreach( $genders as $gender ) {
 
 		// Create a condensed version without spaces or special characters
-		$gender_condensed = pet_value_condensed($gender);
+		$gender_condensed = pet_value_condensed( $gender );
 
 		// Create a list
 		$gender_list .= '<li class="btn " data-group='.$gender_condensed.'><span class="psr__hoverme">'.$gender_condensed.'</span></li>';
@@ -1173,7 +1175,7 @@ function get_gender_list($pets) {
 	such as spayed, hasshots
  * ============================================================= */
 
-function get_options_list($pets) {
+function get_options_list( $pets ) {
 
 	// Define Variables
 	$options = '';
@@ -1231,7 +1233,7 @@ function get_options_list($pets) {
  * ============================================================= */
 
 //gets all options/special needs(used for one pet popup)
-function get_pet_options_list($pet) {
+function get_pet_options_list( $pet ) {
 
 	// Define Variables
 	$pet_options = '';
@@ -1260,7 +1262,7 @@ function get_pet_options_list($pet) {
 	Used for LooKing for... section:
 	Cat friendly, dog friendly, kid friendly, special needs
  * ============================================================= */
-function get_pet_options_list_classes($pet) {
+function get_pet_options_list_classes( $pet ) {
 
 	// Define Variables
 	$pet_optionClasses = '';
@@ -1308,7 +1310,7 @@ function get_pet_options_list_classes($pet) {
 	Used for LooKing for... section:
 	Cat friendly, dog friendly, kid friendly, special needs
  * ============================================================= */
-function get_pet_options_list_data_groups($pet) {
+function get_pet_options_list_data_groups( $pet ) {
 
 	// Define Variables
 	$pet_optionDataGroups = '';
@@ -1500,6 +1502,6 @@ function display_petfinder_search_rescue($atts) {
 	return $petfinder_list;
 
 }
-add_shortcode( 'petfinder_search_rescue','display_petfinder_search_rescue' );
+add_shortcode( 'wp-petfinder-listing','display_petfinder_search_rescue' );
 
 ?>
