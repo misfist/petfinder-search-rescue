@@ -5,6 +5,8 @@
 ?>
 <div class="psr__span2 picture-item shuffle-item filtered <?php echo $classes; ?>" data-groups="[&quot;<?php echo $data_atts; ?>&quot;]" data-title="<?php echo $pet_name; ?>">
 
+    I AM A PET LIST
+
     <div class="picture-item__inner">
         <div class="picture-item__glyph"><?php echo $pet_photo_thumbnail; ?></div>
         <div class="picture-item__details clearfix">

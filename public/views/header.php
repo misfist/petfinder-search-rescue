@@ -13,10 +13,10 @@
 
     <div data-twttr-rendered="true" cz-shortcut-listen="true">
 
-        <?php include_once( plugins_url(__FILE__ ) . 'public/views/custom-styles.php' ); ?>
+        <?php include_once( PETFINDER_PLUGIN_DIR . 'public/views/custom-styles.php' ); ?>
 
         <div class="popup-bg"></div>
 
-        <?php include_once( plugins_url(__FILE__ ) . 'public/views/modals/pet-detail.php' ); ?>
+        <?php include_once( PETFINDER_PLUGIN_DIR . 'public/views/modals/pet-detail.php' ); ?>
 
-        <?php include_once( plugins_url(__FILE__ ) . 'public/views/modals/adoption-detail.php' ); ?>
+        <?php include_once( PETFINDER_PLUGIN_DIR . 'public/views/modals/adoption-detail.php' ); ?>

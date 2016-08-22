@@ -35,15 +35,26 @@ WordPress Petfinder Listing uses both Petfinder.com API as well as the Shuffle.j
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+
+define( 'PETFINDER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'PETFINDER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PETFINDER_BASE_URL', esc_url( 'https://api.petfinder.com/shelter.getPets?' ) );
+define( 'PETFINDER_SINGLE_PET_URL', 'http://api.petfinder.com/pet.get?' );
+
 /**
  * Load Widget
  */
-include( 'widget/petfinder-search-rescue-widget.php' );
+include( plugin_dir_path( __FILE__ ) . 'includes/helpers.php' );
+
+/**
+ * Load Widget
+ */
+include( plugin_dir_path( __FILE__ ) . 'widget/petfinder-search-rescue-widget.php' );
 
 /**
  * Load Shortcode
  */
-include( 'public/wp-petfinder-listing-shortcode.php' );
+include( plugin_dir_path( __FILE__ ) . 'public/wp-petfinder-listing-shortcode.php' );
 
 
 /**
@@ -51,20 +62,17 @@ include( 'public/wp-petfinder-listing-shortcode.php' );
  */
 $pluginName = plugin_basename( __FILE__ );
 
-define( 'PETFINDER_BASE_URL', esc_url( 'https://api.petfinder.com/shelter.getPets?' ) );
-define( 'PETFINDER_SINGLE_PET_URL', 'http://api.petfinder.com/pet.get?' );
-
 /**
  * Enqueue Admin Scripts
  */
 function wp_petfinder_listing_enqueue_admin_scripts(  ) {
     // first check that $hook_suffix is appropriate for your admin page
     wp_enqueue_style( 'wp-color-picker' );
-    wp_enqueue_script( 'psr-script-handle', plugins_url( '/js/my-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    wp_enqueue_script( 'psr-script-handle', plugin_dir_url( __FILE__ ) . 'js/my-script.js', array( 'wp-color-picker' ), false, true );
     wp_enqueue_script( 'jquery' );
 
     if( is_admin() ) {
-        wp_enqueue_style( 'wp-petfinder-listing-admin', plugins_url('css/psr_rows_styles.css', __FILE__ ) );
+        wp_enqueue_style( 'wp-petfinder-listing-admin', plugin_dir_url( __FILE__ ) . 'css/psr_rows_styles.css' );
     }
 
 }
@@ -82,11 +90,11 @@ add_action( 'admin_enqueue_scripts', 'wp_petfinder_listing_enqueue_admin_scripts
  * @return void
  */
 function wp_petfinder_listing_enqueue_public_scripts() {
-    wp_enqueue_style( 'wp-petfinder-listing-filter', plugins_url( __FILE__ ) . 'public/assets/css/psr_filter_styles.css' );
-    wp_enqueue_style( 'wp-petfinder-listing-rows', plugins_url( __FILE__ ) . 'public/assets/css/psr_rows_styles.css' );
-    wp_enqueue_script( 'wp-petfinder-listing-public', plugins_url( __FILE__ ) . 'public/assets/js/modernizr.custom.min.js', '', null, true );
-    wp_enqueue_script( 'jquery-shuffle', plugins_url( __FILE__ ) . 'public/assets/js/jquery.shuffle.js', array( 'jquery' ), null, true );
-    wp_enqueue_script( 'wp-petfinder-listing-homepage', plugins_url( __FILE__ ) . 'public/assets/js/homepage.js', array( 'jquery' ), null, true );
+    wp_enqueue_style( 'wp-petfinder-listing-filter', plugin_dir_url( __FILE__ ) . 'public/assets/css/psr_filter_styles.css' );
+    wp_enqueue_style( 'wp-petfinder-listing-rows', plugin_dir_url( __FILE__ ) . 'public/assets/css/psr_rows_styles.css' );
+    wp_enqueue_script( 'wp-petfinder-listing-public', plugin_dir_url( __FILE__ ) . 'public/assets/js/modernizr.custom.min.js', '', null, true );
+    wp_enqueue_script( 'jquery-shuffle', plugin_dir_url( __FILE__ ) . 'public/assets/js/jquery.shuffle.js', array( 'jquery' ), null, true );
+    wp_enqueue_script( 'wp-petfinder-listing-homepage', plugin_dir_url( __FILE__ ) . 'public/assets/js/homepage.js', array( 'jquery' ), null, true );
 }
 add_action( 'wp_enqueue_scripts', 'wp_petfinder_listing_enqueue_public_scripts' );
 
@@ -246,7 +254,7 @@ function pet_sr_options_page() {
     /**
      * Settings Page Form
      */
-    include_once( 'admin/views/settings.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'admin/views/settings.php' );
 
 }
 
@@ -261,40 +269,46 @@ function pet_sr_options_page() {
  */
 function get_petfinder_data( $api_key, $shelter_id, $count, $pet = '' ) {
 
-    // Get settings
-    if ( empty( $api_key ) || empty( $shelter_id ) ) {
-        throw new Exception( 'Petfinder requires a valid API key and shelter ID in order to fetch the pet listings.' );
-        return;
+    $request = get_transient( 'wp_petfinder_data' );
+
+    if( false ===  $request ) {
+
+        // Get settings
+        if ( empty( $api_key ) || empty( $shelter_id ) ) {
+            throw new Exception( 'Petfinder requires a valid API key and shelter ID in order to fetch the pet listings.' );
+            return;
+        }
+
+        if( empty( $pet ) ) {
+            $base_url = PETFINDER_BASE_URL;
+            $params = http_build_query(
+                array(
+                    'format' => 'json',
+                    'key' => $api_key,
+                    'id' => $shelter_id,
+                    'count' => (int) $count,
+                    'status' => 'A',
+                    'output' => 'full',
+                )
+            );
+        } else {
+            $base_url = PETFINDER_SINGLE_PET_URL;
+            $params = http_build_query(
+                array(
+                    'format' => 'json',
+                    'key' => $api_key,
+                    'id' => (int) $pet
+                )
+            );
+        }
+
+        // Get API data
+        $request = wp_remote_get( $base_url . $params );
+
+        set_transient( 'wp_petfinder_data', $request, 12 * HOUR_IN_SECONDS );
+
     }
 
-    if( empty( $pet ) ) {
-        // Variables
-        $base_url = PETFINDER_BASE_URL;
-        $params = http_build_query(
-            array(
-                'format' => 'json',
-                'key' => $api_key,
-                'id' => $shelter_id,
-                'count' => (int) $count,
-                'status' => 'A',
-                'output' => 'full',
-            )
-        );
-    } else {
-        // Variables
-        $base_url = PETFINDER_SINGLE_PET_URL;
-        $params = http_build_query(
-            array(
-                'format' => 'json',
-                'key' => $api_key,
-                'id' => (int) $pet
-            )
-        );
-    }
-
-
-    // Get API data
-    $request = wp_remote_get( $base_url . $params );
     $response = wp_remote_retrieve_body( $request );
     $data = json_decode( $response, true );
 
@@ -312,26 +326,6 @@ function get_petfinder_data( $api_key, $shelter_id, $count, $pet = '' ) {
 
     // Return the pet data
     return $data['petfinder']['pets']['pet'];
-
-	// // If no specific pet is specified
-	// if ( $pet == '' ) {
-	// 	// Create request URL for all pets from the shelter
-	// 	$request_url = 'http://api.petfinder.com/shelter.getPets?key=' . $api_key . '&count=' . $count . '&id=' . $shelter_id . '&status=A&output=full';
-	// }
-    //
-	// // If a specific pet IS specified
-	// else {
-	// 	// Create a request URL for that specific pet's data
-	// 	$request_url = 'http://api.petfinder.com/pet.get?key=' . $api_key . '&id=' . $pet;
-	// }
-    //
-	// // Request data from Petfinder
-	// $petfinder_data = @simplexml_load_file( $request_url );
-    //
-	// // If data not available, don't display errors on page
-	// if ($petfinder_data === false) {}
-    //
-	// return $petfinder_data;
 
 }
 
@@ -421,19 +415,19 @@ function get_text_emails( $text ) {
 
 /**
  * Cleanup Pet Names
+ *
+ * @uses wp_strip_all_tags
+ *
  * @param  string $pet_name
  * @return string $pet_name
  */
 function get_pet_name( $pet_name ) {
 
-	// Clean-up pet name
-	$pet_name = array_shift( explode( '-', $pet_name ) ); // Remove '-' from animal names
-	$pet_name = array_shift( explode( '(', $pet_name ) ); // Remove '(...)' from animal names
-	$pet_name = array_shift( explode( '[', $pet_name ) ); // Remove '[...]' from animal names
-	$pet_name = strtolower( $pet_name ); // Transform names to lowercase
-	$pet_name = ucwords( $pet_name ); // Capitalize the first letter of each name
+    $pet_name = wp_strip_all_tags( $pet_name );
 
-	// Return pet name
+	$pet_name = strtolower( $pet_name );
+	$pet_name = ucwords( $pet_name );
+
 	return $pet_name;
 
 }
@@ -450,9 +444,10 @@ function get_pet_name( $pet_name ) {
  * @return string $pet_description
  */
 function get_pet_description( $pet_description ) {
-
-    return wp_strip_all_tags( $pet_description );
-
+    if( $pet_description ) {
+        return wp_strip_all_tags( $pet_description );
+    }
+    return;
 }
 
 /**
@@ -467,62 +462,45 @@ function get_pet_description( $pet_description ) {
  */
 function get_pet_photos( $pet, $photo_size = 'medium', $limit = true ) {
 
-	// Set size
-	if ( $photo_size == 'large' ) {
-		$pet_photo_size = 'x';
-	}
-	if ( $photo_size == 'medium' ) {
-		$pet_photo_size = 'pn';
-	}
-	if ( $photo_size == 'thumb_small' ) {
-		$pet_photo_size = 't';
-	}
-	if ( $photo_size == 'thumb_medium' ) {
-		$pet_photo_size = 'pnt';
-	}
-	if ( $photo_size == 'thumb_large' ) {
-		$pet_photo_size = 'fpm';
-	}
+    switch ( $photo_size  ) {
+        case 'large' :
+            $pet_photo_size = 'x';
+            break;
+        case 'thumb_small' :
+            $pet_photo_size = 't';
+            break;
+        case 'thumb_medium' :
+            $pet_photo_size = 'pnt';
+            break;
+        case 'thumb_large' :
+            $pet_photo_size = 'fpm';
+            break;
+        default :
+            $pet_photo_size = 'pn';
+            break;
+    }
 
-	// Define Variables
-	$pet_photos = '';
+	$photos = '';
 
-	// If pet has photos
-	if( count( $pet->media->photos ) > 0 ) {
+    if( array_key_exists( 'photos', $pet['media'] ) && !empty( $pet['media']['photos'] ) ) {
 
-		// Get Pet Name
-		$pet_name = get_pet_name( $pet->name );
+        $pet_name = get_pet_name( $pet['name'] );
 
-		// For each photo, get photos that match the set size
-		foreach ( $pet->media->photos->photo as $photo ) {
-			foreach( $photo->attributes() as $key => $value ) {
-				if ( $key == 'size' ) {
-					if ( $value == $pet_photo_size ) {
+        foreach( $pet['media']['photos']['photo'] as $photo ) {
 
-						// If limit set on number of photos, get the first photo
-						if ( $limit == true ) {
-							$pet_photos = '<p><img alt="Photo of ' . $pet_name . '" src="' . $photo . '"></p>';
-							break 2;
-						}
+            if( $pet_photo_size === $photo['@size'] ) {
+                $photos .= '<li><img alt="Photo of ' . $pet_name . '" src="' . esc_url( $photo['$t'] ) . '"></li>';
+            } else {
+                $photos = '<li>' . __( 'No Photo Available', 'wp-petfinder-listing' ) . '</li>';
+            }
 
-						// Otherwise, get all of them
-						else {
-							$pet_photos .= '<li><img alt="Photo of ' . $pet_name . '" src="' . $photo . '"></li>';
-						}
+        }
 
-					}
-				}
-			}
-		}
-	}
+        return $photos;
 
-	// If no photos have been uploaded for the pet
-	else {
-		$pet_photos = '<p>' . __( 'No Photo Available', 'wp-petfinder-listing' ) . '</p>';
-	}
+    }
 
-	return $pet_photos;
-
+    return;
 }
 
 /**
@@ -578,6 +556,7 @@ function get_type_list( $pets ) {
     $pet_sr_options = get_option('petfinder-search-and-rescue');
 
 	$output = '<div class="psr_container-pets">';
+
 	//all pet options
 	if ( $pet_sr_options['psr_optionssection_remove']=='on' || $pet_sr_options['psr_hideoptionssection_default']=='on' ) {
         $output .= '<div id="all-pet-options" style="display: none;">';
@@ -588,13 +567,13 @@ function get_type_list( $pets ) {
 
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/pet-filter-list.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'public/views/pet-filter-list.php' );
 
-    $output .= ob_get_contents();
+    $filter_list_output = ob_get_contents();
 
     ob_end_clean();
 
-    return $output;
+    return $output . $filter_list_output;
 
 }
 
@@ -611,79 +590,26 @@ function getHeader() {
     $arrowdiv = ( 1 === $pet_sr_options['psr_pageuparrow_show'] ) ? '<div class="psr__hoverme p_sr-pagetop-arrow"><span class="ico-psr_up"></span></div>' : '';
 
 	$output = '';
-	// $output .= '<div id="petfinder_search_rescue_container">';
-    //
-	// //PRELOADER
-	// $output .= '<div id="psr__preloader">';
- //  	$output .= 'Loading our adoptable pets';
-    // $output .= '<div id="preloader-icon"></div>';
-	// $output .= '</div>';
-    //
-    // $output .= '<div data-twttr-rendered="true" cz-shortcut-listen="true">';
-
-    /**
-     * Load custom styles
-     */
-    // ob_start();
-    //
-    // include_once( plugins_url(__FILE__ ) . 'public/views/custom-styles.php' );
-    //
-    // $output .= ob_get_contents();
-    //
-    // ob_end_clean();
-
-    /**
-     * Load modal background
-     */
-    // ob_start();
-    //
-    // include_once( plugins_url(__FILE__ ) . 'public/views/modals/background.php' );
-    //
-    // $output .= ob_get_contents();
-    //
-    // ob_end_clean();
-
-    /**
-     * Load pet detail modal
-     */
-    // ob_start();
-    //
-    // include_once( plugins_url(__FILE__ ) . 'public/views/modals/pet-detail.php' );
-    //
-    // $output .= ob_get_contents();
-    //
-    // ob_end_clean();
-
-    /**
-     * Load adoption modal
-     */
-    // ob_start();
-    //
-    // include_once( plugins_url(__FILE__ ) . 'public/views/modals/adoption-detail.php' );
-    //
-    // $output .= ob_get_contents();
-    //
-    // ob_end_clean();
-
 
     /**
      * Load adoption modal
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/header.php' );
+    include_once( plugin_dir_path( __FILE__ ) . '/public/views/header.php' );
 
-    $output .= ob_get_contents();
+    $header_output = ob_get_contents();
 
     ob_end_clean();
 
-    return $output;
+    return $output . $header_output;
 
 }
 
 /**
  * Render Breed List
  * List of available breeds.
+ * There may be 1 or more breeds for each pet
  * @param  array $pets
  * @return string $output
  */
@@ -695,9 +621,21 @@ function get_breed_list( $pets ) {
 
 	// Get a list of breeds for each pet
 	foreach( $pets as $pet ) {
-		foreach( $pet['breeds'] as $breed ) {
-			$breeds .= $breed['$t'] . "|";
-		}
+
+        if( array_key_exists( '$t', $pet['breeds']['breed'] ) ) {
+
+            $breeds .= $pet['breeds']['breed']['$t'] . "|";
+
+        } elseif( array_key_exists( 'breed', $pet['breeds'] ) && 1 < count( $pet['breeds']['breed'] ) ) {
+
+            for( $i = 0; $i < count( $pet['breeds']['breed'] ); $i++ ) {
+                $breeds .= $pet['breeds']['breed'][$i]['$t'] . "|";
+            }
+
+        } else {
+            throw new Exception( 'There is no breed key in array.' );
+        }
+
 	}
 
 	// Remove duplicates, convert into an array and alphabetize
@@ -719,24 +657,21 @@ function get_breed_list( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/breed-list.php' );
+    include( plugin_dir_path( __FILE__ ) . 'public/views/breed-list.php' );
 
-    $output .= ob_get_contents();
-
-    ob_end_clean();
+    $breed_list_output = ob_get_contents();
 
     /**
      * Load breed list
      */
-    ob_start();
+    include( plugin_dir_path( __FILE__ ) . 'public/views/pet-grid.php' );
+    //
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/pet-grid.php' );
-
-    $output .= ob_get_contents();
+    $pet_grid_output = ob_get_contents();
 
     ob_end_clean();
 
-	return $output;
+	return $breed_list_output . $pet_grid_output;
 }
 
 /**
@@ -776,7 +711,7 @@ function get_size_list( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/size-list.php' );
+    include_once( plugin_dir_path( __FILE__ ) . '/public/views/size-list.php' );
 
     $output = ob_get_contents();
 
@@ -821,7 +756,7 @@ function get_age_list( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/age-list.php' );
+    include_once( plugin_dir_path( __FILE__ ) . '/public/views/age-list.php' );
 
     $output = ob_get_contents();
 
@@ -866,7 +801,7 @@ function get_gender_list( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/gender-list.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'public/views/gender-list.php' );
 
     $output = ob_get_contents();
 
@@ -878,7 +813,7 @@ function get_gender_list( $pets ) {
 
 /**
  * Render Options & Special Needs List
- * Used for Looing for... section:
+ * Used for Looking for... section:
  * Cat friendly, dog friendly, kid friendly, special needs
  * Rest of options/special needs displayed in tags in popup
  * such as spayed, has shots
@@ -887,23 +822,17 @@ function get_gender_list( $pets ) {
  */
 function get_options_list( $pets ) {
 
-	// Define Variables
-	$options = '';
+	$options = [];
 	$options_list = '';
 
-	// Create a list of pet options and special needs
+	// Put each option in an array
 	foreach( $pets as $pet ) {
-        echo '<pre>';
-        var_dump( $pet['options']['$t'] );
-        echo '</pre>';
-
-		foreach( $pet->options->option as $pet_option ) {
-			$options .= get_pet_option( $pet_option ) . "|";
-		}
+        array_push( $options, $pet['options'] );
 	}
 
-	// Remove duplicates, convert into an array and reverse list order
-	$options = array_reverse( array_filter( array_unique( explode( '|', $options) ) ) );
+    $options = array_unique( array_value_recursive( '$t', $options ) );
+
+    asort( $options );
 
 	// For each pet option
 	foreach( $options as $option ) {
@@ -920,7 +849,7 @@ function get_options_list( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/options-list.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'public/views/options-list.php' );
 
     $output = ob_get_contents();
 
@@ -942,13 +871,21 @@ function get_pet_options_list( $pet ) {
 	$pet_options = '';
 
 	// For each option
-	foreach( $pet->options->option as $option ) {
+	foreach( $pet['options'] as $option ) {
 
-		// Get option value
-		$get_option = get_pet_option( $option );
+        $count = count( $option );
+
+        if( array_key_exists( '$t', $option ) ) {
+            $get_option = get_pet_option( $option['$t'] );
+        }
+        elseif( 1 < $count ) {
+            for( $i = 0; $i < $count; $i++ ) {
+                $get_option = get_pet_option( $option[$i]['$t'] );
+            }
+        }
 
 		// If option value has been set
-		if ( $get_option != '' ) {
+		if ( '' !== $get_option ) {
 			$pet_options .= '<span>' . $get_option .'</span>';
 		}
 
@@ -971,7 +908,7 @@ function get_pet_options_list( $pet ) {
 function get_pet_options_list_classes( $pet ) {
 
 	// Define Variables
-	$pet_optionClasses = '';
+	$classes = '';
 
 	// Default Values
 	$is_dog_friendly = true;
@@ -979,38 +916,45 @@ function get_pet_options_list_classes( $pet ) {
 	$is_kid_friendly = true;
 	$is_special_needs = false;
 
-	// For each option
-	foreach( $pet->options->option as $option ) {
-		//only display certain options/special needs for classes
-		if ( 'noDogs' === $option ){
-			$is_dog_friendly = false;
-		}
-		if ( 'noCats' === $option ){
-			$is_cat_friendly = false;
-		}
-		if ( 'noKids' === $option ){
-			$is_kid_friendly = false;
-		}
-		if ( 'specialNeeds' === $option ){
-			$is_special_needs = true;
-		}
-	}
+    if( array_key_exists( 'option', $pet['options'] ) ) {
 
-    //Put classes altogether based on options
-	if ( true === $is_dog_friendly ){
-    	$classes .= 'dog-friendly ';
-	}
-	if ( true === $is_cat_friendly ){
-    	$classes .= 'cat-friendly ';
-	}
-	if ( true === $is_kid_friendly ){
-    	$classes .= 'kid-friendly ';
-	}
-	if ( true === $is_special_needs ){
-    	$classes .= 'special-needs ';
-	}
+        foreach( $pet['options'] as $option ) {
 
-	return $classes;
+            if( array_search( 'noDogs', array_column( $option, '$t' ) ) ) {
+                $is_dog_friendly = false;
+            }
+            if( array_search( 'noCats', array_column( $option, '$t' ) ) ) {
+                $is_cat_friendly = false;
+            }
+            if( array_search( 'noKids', array_column( $option, '$t' ) ) ) {
+                $is_kid_friendly = false;
+            }
+            if( array_search( 'specialNeeds', array_column( $option, '$t' ) ) ) {
+                $is_special_needs = false;
+            }
+
+        }
+
+        //Put classes altogether based on options
+        if ( true === $is_dog_friendly ){
+            $classes .= 'dog-friendly ';
+        }
+        if ( true === $is_cat_friendly ){
+            $classes .= 'cat-friendly ';
+        }
+        if ( true === $is_kid_friendly ){
+            $classes .= 'kid-friendly ';
+        }
+        if ( true === $is_special_needs ){
+            $classes .= 'special-needs ';
+        }
+
+        return $classes;
+
+    }
+
+    return;
+
 }
 
 /**
@@ -1019,49 +963,60 @@ function get_pet_options_list_classes( $pet ) {
  * Example no cats = !cat-friendly
  * Used for LooKing for... section:
  * Cat friendly, dog friendly, kid friendly, special needs
+ *
+ * @uses wp_list_pluck
+ * @uses in_array
+ *
  * @param  int $pet
  * @return string $data_atts
  */
 function get_pet_options_list_data_groups( $pet ) {
 
 	// Default Values
-	$pet_optionDataGroups = '';
+	$data_atts = '';
+
 	$is_dog_friendly = true;
 	$is_cat_friendly = true;
 	$is_kid_friendly = true;
 	$is_special_needs = false;
 
-	// For each option
-	foreach( $pet->options->option as $option ) {
-	//only display certain options/special needs for classes
-        if ( 'noDogs' === $option ){
+    if( array_key_exists( 'option', $pet['options'] ) ) {
+
+        $options = wp_list_pluck( $pet['options']['option'], '$t' );
+
+        if( in_array( 'noDogs', $options ) ) {
             $is_dog_friendly = false;
         }
-        if ( 'noCats' === $option ){
+        if( in_array( 'noCats', $options ) ) {
             $is_cat_friendly = false;
         }
-        if ( 'noKids' === $option ){
+        if( in_array( 'noKids', $options ) ) {
             $is_kid_friendly = false;
         }
-        if ( 'specialNeeds' === $option ){
+        if( in_array( 'specialNeeds', $options ) ) {
             $is_special_needs = true;
         }
-	}
-	//Put data attributes altogether based on options
-	if ( true === $is_dog_friendly ){
-    	$data_atts .= '&quot;dog-friendly&quot;,';
-	}
-	if ( true === $is_cat_friendly ){
-    	$data_atts .= '&quot;cat-friendly&quot;,';
-	}
-	if ( true === $is_kid_friendly ){
-    	$data_atts .= '&quot;kid-friendly&quot;,';
-	}
-	if ( true === $is_special_needs ){
-    	$data_atts .= '&quot;special-needs&quot;,';
-	}
 
-	return $data_atts;
+        //Put data attributes altogether based on options
+        if ( true === $is_dog_friendly ){
+            $data_atts .= '&quot;dog-friendly&quot;,';
+        }
+        if ( true === $is_cat_friendly ){
+            $data_atts .= '&quot;cat-friendly&quot;,';
+        }
+        if ( true === $is_kid_friendly ){
+            $data_atts .= '&quot;kid-friendly&quot;,';
+        }
+        if ( true === $is_special_needs ){
+            $data_atts .= '&quot;special-needs&quot;,';
+        }
+
+        return $data_atts;
+
+    }
+
+    return;
+
 }
 
 /**
@@ -1072,40 +1027,38 @@ function get_pet_options_list_data_groups( $pet ) {
  */
 function get_all_pets( $pets ) {
 
+    $breeds = [];
+
 	foreach( $pets as $pet ) {
 
 		// Define Variables
-		$pet_name = get_pet_name( $pet->name );
-		$pet_type = get_pet_type( $pet->animal );
-		$pet_size = get_pet_size( $pet->size );
-		$pet_age = get_pet_age( $pet->age );
-		$pet_gender = get_pet_gender( $pet->sex );
+		$pet_name = get_pet_name( $pet['name']['$t'] );
+		$pet_type = get_pet_type( $pet['animal']['$t'] );
+		$pet_size = get_pet_size( $pet['size']['$t'] );
+		$pet_age = get_pet_age( $pet['age']['$t'] );
+		$pet_gender = get_pet_gender( $pet['sex']['$t'] );
 		$pet_options = get_pet_options_list( $pet );
 		$pet_optionClasses = get_pet_options_list_classes( $pet );
 		$pet_optionDataGroups = get_pet_options_list_data_groups( $pet );
-		$pet_description = get_pet_description( $pet->description );
+        $pet_description = ( !empty( $pet['description'] ) ) ? $pet['description']['$t'] : '';
 		$pet_photo_thumbnail = get_pet_photos( $pet, 'medium' );
-		$pet_photo_all = get_pet_photos ( $pet, 'large', false );
-		$pet_more_url = get_permalink() . '?view=pet-details&id=' . $pet->id;
-		$pet_pf_url = esc_url( 'https://www.petfinder.com/petdetail/' ) . $pet->id;
+		$pet_photo_all = get_pet_photos( $pet, 'large', false );
+		$pet_more_url = get_permalink() . '?view=pet-details&id=' . $pet['id']['$t'];
+		$pet_pf_url = esc_url( 'https://www.petfinder.com/petdetail/' ) . $pet['id']['$t'];
 
-		// Create breed classes
-		$pet_breeds_condensed = '';
-		foreach( $pet->breeds->breed as $breed ) {
-			$pet_breeds_condensed .= pet_value_condensed( $breed ) . ' ';
-		}
+        $breed = array_value_recursive( '$t', $pet['breeds'] );
+        $options = array_value_recursive( '$t', $pet['options'] );
 
-		// Create options classes
-		$pet_options_condensed = '';
-		foreach( $pet->options->option as $option ) {
-			$option = get_pet_option( $option );
-			if ( $option != '' ) {
-				$pet_options_condensed .= pet_value_condensed( $option ) . ' ';
-			}
-		}
+        if( is_string( $breed ) ) {
+            $breed_class = pet_value_condensed( $breed );
+        } elseif( is_array( $breed_class ) ) {
+            $breed_class = array_map( function( $breed ) {
+                return pet_value_condensed( $breed );
+            }, $breed );
+        }
 
         $classes = implode( ' ', array(
-            pet_value_condensed( $breed ),
+            $breed_class,
             pet_value_condensed( $pet_type ),
             pet_value_condensed( $pet_size ),
             pet_value_condensed( $pet_age ),
@@ -1114,7 +1067,7 @@ function get_all_pets( $pets ) {
         ) );
 
         $data_atts = implode( '&quot;,&quot;', array(
-            pet_value_condensed( $breed ),
+            $breed_class,
             pet_value_condensed( $pet_type ),
             pet_value_condensed( $pet_size ),
             pet_value_condensed( $pet_age ),
@@ -1123,7 +1076,7 @@ function get_all_pets( $pets ) {
         ) );
 
         $tags = implode( ', ', array(
-            pet_value_condensed( $breed ),
+            $breed_class,
             pet_value_condensed( $pet_type ),
             pet_value_condensed( $pet_size ),
             pet_value_condensed( $pet_age ),
@@ -1131,7 +1084,7 @@ function get_all_pets( $pets ) {
         ) );
 
         $atts = implode( '</span><span>', array(
-            pet_value_condensed( $breed ),
+            $breed_class,
             pet_value_condensed( $pet_type ),
             pet_value_condensed( $pet_size ),
             pet_value_condensed( $pet_age ),
@@ -1143,7 +1096,7 @@ function get_all_pets( $pets ) {
          */
         ob_start();
 
-        include_once( plugins_url(__FILE__ ) . 'public/views/pets-list.php' );
+        include_once( plugin_dir_path( __FILE__ ) . 'public/views/pets-list.php' );
 
         $output = ob_get_contents();
 
@@ -1156,7 +1109,7 @@ function get_all_pets( $pets ) {
      */
     ob_start();
 
-    include_once( plugins_url(__FILE__ ) . 'public/views/footer.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'public/views/footer.php' );
 
     $output = ob_get_contents();
 

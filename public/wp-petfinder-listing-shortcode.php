@@ -3,7 +3,7 @@
  * WordPress Petfinder Listing Shortcode
  *
  * @package    WP_Petfinder_Listing
- * @subpackage CVAR_Core\Public
+ * @subpackage WP_Petfinder_Listing\Public
  * @since      1.02.1
  * @license    GPL-2.0+
  */
@@ -28,10 +28,6 @@ function display_petfinder_listing( $atts ) {
 	// Access Petfinder Data
 	$petfinder_data = get_petfinder_data( $api_key, $shelter_id, $count );
 
-    // echo '<pre>';
-    // var_dump( $petfinder_data );
-    // echo '</pre>';
-
     if( !empty( $petfinder_data ) ) {
 
         $pets = $petfinder_data;
@@ -45,6 +41,10 @@ function display_petfinder_listing( $atts ) {
                             get_options_list( $pets ) .
                             get_breed_list( $pets ) .
                             get_all_pets( $pets );
+
+        // echo '<pre>';
+        // var_dump( 'get_type_list', get_type_list( $pets ) );
+        // echo '</pre>';
 
     } else {
         throw new Exception ( 'The API returned without any records.' );
